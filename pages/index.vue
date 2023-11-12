@@ -1,9 +1,47 @@
 <script setup lang="ts">
+import type { IServicePrice, TServicePrice } from '~/types';
+
 const landing = useLandingStore() 
 const {width} = useWindowSize()
 
-const { promo, services } = storeToRefs(landing)
+const { promo, services, benefits, questions, pricesAndServices } = storeToRefs(landing)
 
+const totalServicesPrice = ref<number>(0)
+const servicePricesArray = ref<IServicePrice[]>([])
+
+const priceServiceToDisplay = computed(() => {
+	return (value: TServicePrice) => {
+		if(value === 'Free') return 'Gratuit'
+		if(value === 'PriceOnRequest') return 'Preț la cerere'
+		return `Pret ${value} lei`
+	}
+})
+
+
+let priceToogle = false
+
+const priceServiceClickHandler = (price: IServicePrice) => {
+	if(!priceToogle) {
+		totalServicesPrice.value = 0
+		const temp = servicePricesArray.value.find(s => s.id === price.id)
+		if(!temp) {
+			servicePricesArray.value.push(price)
+		} else {
+			servicePricesArray.value = servicePricesArray.value.filter(s => s.id != price.id)
+		}
+
+	
+			servicePricesArray.value.forEach(item => {
+				if(item.price != 'Free' && item.price != 'PriceOnRequest' ) {
+					totalServicesPrice.value += item.price
+				}
+			})
+		
+		priceToogle = true
+	} else {
+		priceToogle = false
+	}	
+}
 </script>
 
 <template>
@@ -134,139 +172,20 @@ const { promo, services } = storeToRefs(landing)
 					</p>
 				</div>
 				<div class="advantages__items">
-					<article class="advantages__item">
+					<article 
+						class="advantages__item"
+						v-for="avantage in benefits"
+						:key="avantage.id"
+					>
 						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-1.webp" type="image/webp"><img src="img/advantages/image-1.png" alt="image-1"></picture>
+							<img :src="avantage.image" alt="image-1">
 						</div>
 						<h4 class="advantages__item-title">
-							Maximizarea expunerii
+							{{avantage.title}}
 						</h4>
 						<div class="advantages__item-text">
 							<p>
-								Prin intermediul marketingului imobiliar, proprietatea
-								dvs. poate fi prezentată pe mai multe platforme și canale, cum ar fi site-uri web,
-								rețele sociale, site-uri imobiliare, ceea ce crește expunerea acesteia către un
-								public
-								mai larg de cumpărători sau chiriași potențiali.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-2.webp" type="image/webp"><img src="img/advantages/image-2.png" alt="image-2"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Atrage mai mulți potențiali cumpărători sau chiriași
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Cu ajutorul unor strategii
-								de marketing atent concepute, puteți atrage un număr mai mare de persoane
-								interesate de proprietatea dvs., ceea ce poate duce la creșterea șanselor de a găsi
-								un cumpărător sau chiriaș potrivit.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-3.webp" type="image/webp"><img src="img/advantages/image-3.png" alt="image-3"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Prezentarea profesionistă
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Fotografiile de calitate, videoclipurile
-								și tururile
-								virtuale pot prezenta proprietatea în cel mai bun mod posibil, evidențiind
-								caracteristicile sale cheie și punând în valoare aspectele atractive ale acesteia.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-4.webp" type="image/webp"><img src="img/advantages/image-4.png" alt="image-4"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Stabilirea unui preț corect
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Prin efectuarea unei analize comparative de piață,
-								puteți stabili un preț adecvat pentru proprietatea dumneavoastra, ceea ce va face ca
-								oferta să fie mai atractivă pentru potențialii cumpărători. Un cost excesiv
-								determină o
-								perioadă prelungită petrecută în piață, ceea ce duce la perimarea ofertei și la
-								lipsa
-								de interes din partea clienților, deoarece produsul este disponibil de mult timp și
-								nu
-								mai atrage atenția. Dacă o proprietate este vândută sub valoarea sa de piață, nu
-								veți
-								obține profitul maxim posibil.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-5.webp" type="image/webp"><img src="img/advantages/image-5.png" alt="image-5"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Diferențierea de concurență
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Marketingul imobiliar vă permite să vă
-								diferențiați
-								de alte proprietăți aflate la vânzare în aceeași zonă. Cu un pachet de marketing
-								bine
-								pus la punct, puteți face ca proprietatea dvs. să se evidențieze si sa se
-								pozitioneze
-								in topul preferintelor potentialilor cumparatori sau chiriasi.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-6.webp" type="image/webp"><img src="img/advantages/image-6.png" alt="image-6"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Economisirea timpului
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Cu ajutorul serviciilor de marketing, puteți reduce
-								necesitatea organizării repetate a vizionărilor și a întâlnirilor cu potențialii
-								cumpărători sau chiriași, deoarece aceștia pot avea o idee mai clară despre
-								proprietatea dvs. înainte de a o viziona.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-7.webp" type="image/webp"><img src="img/advantages/image-7.png" alt="image-7"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Eficiența costurilor
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Cheltuielile cu marketingul pot fi eficiente în comparație cu
-								costurile suplimentare legate de întârzierea vânzării sau de necesitatea de a reduce
-								prețul pentru a atrage cumpărători.
-							</p>
-						</div>
-					</article>
-					<article class="advantages__item">
-						<div class="advantages__item-img">
-							<picture><source srcset="img/advantages/image-8.webp" type="image/webp"><img src="img/advantages/image-8.png" alt="image-8"></picture>
-						</div>
-						<h4 class="advantages__item-title">
-							Negociere mai puternică
-						</h4>
-						<div class="advantages__item-text">
-							<p>
-								Atunci când aveți mai mulți cumpărători sau chiriași
-								interesați, puteți negocia un preț mai bun sau condiții mai favorabile pentru dvs.
+								{{avantage.description}}
 							</p>
 						</div>
 					</article>
@@ -282,66 +201,20 @@ const { promo, services } = storeToRefs(landing)
 					</span>
 				</h2>
 				<div data-spollers class="spollers">
-					<details class="spollers__item">
+					<details 
+						class="spollers__item"
+						v-for="question in questions"
+						:key="question.id"
+					>
 						<summary class="spollers__title">
 							<span class="spollers__counter"></span>
-							Diferențierea de concurență?
+							{{question.question}}
 						</summary>
 						<div class="spollers__body">
-							Prin intermediul marketingului imobiliar, proprietatea
-							dvs. poate fi prezentată pe mai multe platforme și canale, cum ar fi site-uri web,
-							rețele sociale, site-uri imobiliare, ceea ce crește expunerea acesteia către un public
-							mai larg de cumpărători sau chiriași potențiali.
+							{{question.answer}}
 						</div>
 					</details>
-					<details class="spollers__item">
-						<summary class="spollers__title">
-							<span class="spollers__counter"></span>
-							Atrage mai mulți potențiali cumpărători sau chiriași?
-						</summary>
-						<div class="spollers__body">
-							Prin intermediul marketingului imobiliar, proprietatea
-							dvs. poate fi prezentată pe mai multe platforme și canale, cum ar fi site-uri web,
-							rețele sociale, site-uri imobiliare, ceea ce crește expunerea acesteia către un public
-							mai larg de cumpărători sau chiriași potențiali.
-						</div>
-					</details>
-					<details class="spollers__item">
-						<summary class="spollers__title">
-							<span class="spollers__counter"></span>
-							Eficiența costurilor?
-						</summary>
-						<div class="spollers__body">
-							Prin intermediul marketingului imobiliar, proprietatea
-							dvs. poate fi prezentată pe mai multe platforme și canale, cum ar fi site-uri web,
-							rețele sociale, site-uri imobiliare, ceea ce crește expunerea acesteia către un public
-							mai larg de cumpărători sau chiriași potențiali.
-						</div>
-					</details>
-					<details class="spollers__item">
-						<summary class="spollers__title">
-							<span class="spollers__counter"></span>
-							Maximizarea expunerii?
-						</summary>
-						<div class="spollers__body">
-							Prin intermediul marketingului imobiliar, proprietatea
-							dvs. poate fi prezentată pe mai multe platforme și canale, cum ar fi site-uri web,
-							rețele sociale, site-uri imobiliare, ceea ce crește expunerea acesteia către un public
-							mai larg de cumpărători sau chiriași potențiali.
-						</div>
-					</details>
-					<details class="spollers__item">
-						<summary class="spollers__title">
-							<span class="spollers__counter"></span>
-							Stabilirea unui preț corect?
-						</summary>
-						<div class="spollers__body">
-							Prin intermediul marketingului imobiliar, proprietatea
-							dvs. poate fi prezentată pe mai multe platforme și canale, cum ar fi site-uri web,
-							rețele sociale, site-uri imobiliare, ceea ce crește expunerea acesteia către un public
-							mai larg de cumpărători sau chiriași potențiali.
-						</div>
-					</details>
+					
 				</div>
 			</div>
 		</section>
@@ -372,432 +245,61 @@ const { promo, services } = storeToRefs(landing)
 				</h2>
 				<form action="#" class="service-prices__form">
 					<div class="service-prices__items">
-						<div class="service-prices__item item-prices">
+						<div 
+							class="service-prices__item item-prices"
+							v-for="prices in pricesAndServices"
+							:key="prices.id"
+						>
 							<h3 class="item-prices__title">
 								<span class="item-prices__counter"></span>
-								Pachet vanzare rapida
+								{{prices.title}}
 							</h3>
-							<ol>
-								<li>
-									Prețul și analiza de piață
-								</li>
-								<li>
-									Fotografii profesionale
-								</li>
-								<li>
-									Text de marketing
-								</li>
-								<li>
-									Publicarea pe site-uri imobiliare
-								</li>
-								<li>
-									Distribuirea pe Rețele sociale
+							<ol v-if="prices.contentList!.length > 0">
+								<li 
+									v-for="content in prices.contentList"
+									:key="content.id"
+								>
+									{{content.text}}
 								</li>
 							</ol>
 							<div class="item-prices__prices">
-								<div class="checkbox">
+								<div 
+									class="checkbox"
+									v-for="price in prices.services"
+									:key="price.id"
+									@click.stop="priceServiceClickHandler(price)"
+								>
 									<label class="checkbox__label">
 										<input class="checkbox__input" type="checkbox" value="1" name="form[]">
 										<div class="fake-checkbox"></div>
 										<span class="checkbox__text">
-											Pachet vanzare rapida apartament
+											{{price.title}}
 										</span>
 									</label>
 									<div class="item-prices__price">
-										Pret 1000 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="2" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Pachet vanzare rapida casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 1500 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="3" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Pachet vanzare rapida spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
+										{{priceServiceToDisplay(price.price)}}
 									</div>
 								</div>
 							</div>
 							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn">
+								<a :href="prices.exampleUrl" v-if="prices.exampleUrl" class="item-prices__btn btn">
 									Exemple
-								</button>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Video
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="4" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 250 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="5" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 350 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="6" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
-									</div>
+								</a>
+								<div class="item-prices__info" v-if="prices.comment">
+									{{prices.comment}}
 								</div>
 							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Tur virtual 360*
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="7" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 250 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="8" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 350 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="9" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
-									</div>
-								</div>
-							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Drona
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="10" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 250 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="11" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 350 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="12" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
-									</div>
-								</div>
-							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Distribuirea proprietății către agenți și
-								agenții imobiliare
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="13" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Gratuit
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="14" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Gratuit
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="15" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Gratuit
-									</div>
-								</div>
-							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-								<div class="item-prices__info">
-									Serviciile gratuite se pot achizitiona doar impreuna cu un serviciu platit,
-								</div>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Semn de vanzare / inchiriere
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="16" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="17" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="18" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Preț la cerere
-									</div>
-								</div>
-							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Site unic de prezentare a proprietatii
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="19" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 200 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="20" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 200 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="21" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 200 lei
-									</div>
-								</div>
-							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-							</div>
-						</div>
-						<div class="service-prices__item item-prices">
-							<h3 class="item-prices__title">
-								<span class="item-prices__counter"></span>
-								Call center - preluare apelurilor de la
-								cumparatori sau chiriasi si
-								furnizare de informatii
-								despre proprietate
-							</h3>
-							<div class="item-prices__prices">
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="22" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Apartament
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 200 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="23" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Casa/vila
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 200 lei
-									</div>
-								</div>
-								<div class="checkbox">
-									<label class="checkbox__label">
-										<input class="checkbox__input" type="checkbox" value="24" name="form[]">
-										<div class="fake-checkbox"></div>
-										<span class="checkbox__text">
-											Spațiu comercial
-										</span>
-									</label>
-									<div class="item-prices__price">
-										Pret 200 lei
-									</div>
-								</div>
-							</div>
-							<div class="item-prices__bottom">
-								<button type="button" class="item-prices__btn btn" disabled>
-									Exemple
-								</button>
-							</div>
-						</div>
+						</div>	
 					</div>
 					<div class="service-prices__total">
 						<div class="service-prices__img">
-							<picture><source srcset="img/prices-image.webp" type="image/webp"><img src="img/prices-image.png" alt="prices-image"></picture>
+							<picture><source srcset="~/assets/img/prices-image.webp" type="image/webp"><img src="~/assets/img/prices-image.png" alt="prices-image"></picture>
 						</div>
 						<h5 class="service-prices__total-title">
 							Valoare totală:
 						</h5>
 						<div class="service-prices__total-price">
-							1350 lei
+							{{totalServicesPrice}} lei
 						</div>
 						<button type="submit" class="service-prices__total-btn btn">
 							<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -987,153 +489,7 @@ const { promo, services } = storeToRefs(landing)
 			</div>
 		</section>
 		<section class="contacts" id="contacts">
-			<div class="contacts__container">
-				<div class="contacts__body">
-					<h2 class="contacts__title title">
-						Contactați-ne
-					</h2>
-					<div data-tabs class="contacts-tabs">
-						<nav data-tabs-titles class="contacts-tabs__navigation">
-							<button type="button" class="contacts-tabs__title _tab-active">
-								<svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<circle cx="16.5" cy="16.5" r="16.5" fill="url(#paint0_linear_56_385)" />
-									<path d="M7.66248 25.483L8.36248 23.3976C8.59581 22.7268 8.78539 22.0413 9.04789 21.3851C9.11956 21.2452 9.15694 21.0902 9.15694 20.933C9.15694 20.7758 9.11956 20.6208 9.04789 20.4809C8.21875 18.9502 7.88037 17.2015 8.07863 15.4719C8.27689 13.7424 9.0022 12.1156 10.1562 10.8122C10.994 9.85713 12.0396 9.10683 13.2126 8.61891C14.3857 8.131 15.6549 7.91845 16.9229 7.99759C18.8447 8.06101 20.6829 8.79935 22.1146 10.083C23.4685 11.2614 24.4132 12.8393 24.8125 14.5893C25.1459 16.0044 25.1057 17.4819 24.6958 18.8768C24.1946 20.6296 23.1282 22.1677 21.6625 23.2518C20.692 24.0076 19.5664 24.5394 18.3664 24.8092C17.1663 25.0789 15.9213 25.08 14.7208 24.8122C13.9613 24.6594 13.2289 24.394 12.5479 24.0247C12.4954 24 12.4382 23.9872 12.3802 23.9872C12.3222 23.9872 12.2649 24 12.2125 24.0247L8.30414 25.2497L7.66248 25.483ZM9.87914 23.2809H10.0104L12.4604 22.508C12.5455 22.4791 12.6378 22.4791 12.7229 22.508C13.0729 22.683 13.4083 22.9018 13.7729 23.0476C15.2259 23.6857 16.8566 23.7941 18.3812 23.3538C19.278 23.1143 20.1179 22.6981 20.8516 22.1296C21.5854 21.5612 22.1982 20.8519 22.6541 20.0434C23.559 18.4684 23.8259 16.6064 23.4001 14.8406C22.9742 13.0747 21.8879 11.5391 20.3646 10.5497C18.9853 9.65487 17.3378 9.2674 15.7043 9.45363C14.0708 9.63987 12.5529 10.3882 11.4104 11.5705C10.4752 12.5255 9.83695 13.7311 9.57289 15.0413C9.36533 15.9396 9.34233 16.8707 9.50527 17.7782C9.66821 18.6856 10.0137 19.5505 10.5208 20.3205C10.6031 20.4569 10.6466 20.6133 10.6466 20.7726C10.6466 20.9319 10.6031 21.0883 10.5208 21.2247C10.3312 21.8663 10.1271 22.5663 9.87914 23.2809Z" fill="white" />
-									<path d="M20.875 18.9647C20.8661 19.2751 20.7697 19.5768 20.5968 19.8348C20.4239 20.0928 20.1817 20.2967 19.8979 20.423C19.6034 20.584 19.2774 20.6791 18.9425 20.7017C18.6077 20.7244 18.2719 20.6741 17.9583 20.5543C17.3579 20.3365 16.7689 20.0883 16.1937 19.8105C15.4507 19.4169 14.7879 18.8876 14.2396 18.2501C13.6175 17.5659 13.0835 16.8065 12.65 15.9897C12.3248 15.4236 12.1727 14.7746 12.2125 14.123C12.2425 13.7866 12.3438 13.4603 12.5098 13.1661C12.6758 12.8719 12.9025 12.6165 13.175 12.4168C13.3006 12.3317 13.4465 12.2814 13.5979 12.2709C13.7823 12.256 13.9677 12.256 14.1521 12.2709C14.2195 12.2795 14.283 12.3075 14.3348 12.3515C14.3866 12.3955 14.4245 12.4537 14.4437 12.5189C14.5896 12.8543 14.7062 13.1897 14.8375 13.5397C14.9687 13.8897 14.9979 14.0064 15.1 14.2251C15.1897 14.3456 15.2332 14.4944 15.2225 14.6443C15.2118 14.7942 15.1476 14.9352 15.0417 15.0418C14.9013 15.2252 14.7451 15.396 14.575 15.5522C14.5128 15.6012 14.4709 15.6716 14.4574 15.7497C14.444 15.8277 14.4599 15.908 14.5021 15.9751C14.8969 16.6922 15.421 17.33 16.0479 17.8564C16.4973 18.1934 16.9872 18.4727 17.5062 18.6876C17.56 18.7368 17.6302 18.7641 17.7031 18.7641C17.776 18.7641 17.8462 18.7368 17.9 18.6876L18.6292 17.8564C18.7896 17.6814 18.8625 17.6376 19.0667 17.7397L20.8604 18.673C20.8847 18.7174 20.8986 18.7667 20.9011 18.8172C20.9036 18.8677 20.8947 18.9181 20.875 18.9647Z" fill="white" />
-									<defs>
-										<linearGradient id="paint0_linear_56_385" x1="16.5" y1="0" x2="16.5" y2="33" gradientUnits="userSpaceOnUse">
-											<stop stop-color="#1EEA6A" />
-											<stop offset="1" stop-color="#00CD4C" />
-										</linearGradient>
-									</defs>
-								</svg>
-								<span>What’s app</span>
-							</button>
-							<button type="button" class="contacts-tabs__title">
-								<svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<g clip-path="url(#clip0_56_401)">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 33C25.6127 33 33 25.6127 33 16.5C33 7.3873 25.6127 0 16.5 0C7.3873 0 0 7.3873 0 16.5C0 25.6127 7.3873 33 16.5 33Z" fill="url(#paint0_linear_56_401)" />
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M8.25 11.9911V21.3343C8.25 21.8426 8.62205 22.2546 9.13461 22.2546H23.7164C24.2284 22.2546 24.601 21.8378 24.601 21.3343V11.9911C24.601 11.4333 24.2678 11 23.7164 11H9.13461C8.5619 11 8.25 11.4439 8.25 11.9911ZM9.59448 12.8049C9.59448 12.5797 9.73074 12.4509 9.94844 12.4509C10.0831 12.4509 15.3817 15.8084 15.7027 16.0054L16.5319 16.5211C16.7949 16.3449 17.0589 16.1943 17.3314 16.0117C17.8876 15.6562 22.8365 12.4509 22.9728 12.4509C23.191 12.4509 23.3267 12.5797 23.3267 12.8049C23.3267 13.0433 22.8674 13.2802 22.5683 13.4628C20.6889 14.6082 18.81 15.8569 16.9492 17.0449C16.8406 17.1183 16.6304 17.2753 16.4729 17.2514C16.2972 17.2242 10.9054 13.7603 9.92448 13.1833C9.77705 13.0966 9.59448 13.0173 9.59448 12.8049Z" fill="white" />
-									</g>
-									<defs>
-										<linearGradient id="paint0_linear_56_401" x1="16.5" y1="0" x2="16.5" y2="33" gradientUnits="userSpaceOnUse">
-											<stop stop-color="#67D2FF" />
-											<stop offset="0.44" stop-color="#00B4FF" />
-											<stop offset="1" stop-color="#0099D9" />
-										</linearGradient>
-										<clipPath id="clip0_56_401">
-											<rect width="33" height="33" fill="white" />
-										</clipPath>
-									</defs>
-								</svg>
-								<span>Email</span>
-							</button>
-							<button type="button" class="contacts-tabs__title">
-								<svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-									<g clip-path="url(#clip0_56_407)">
-										<path fill-rule="evenodd" clip-rule="evenodd" d="M16.5 33C25.6127 33 33 25.6127 33 16.5C33 7.3873 25.6127 0 16.5 0C7.3873 0 0 7.3873 0 16.5C0 25.6127 7.3873 33 16.5 33Z" fill="url(#paint0_linear_56_407)" />
-										<g clip-path="url(#clip1_56_407)">
-											<mask id="mask0_56_407" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="10" y="9" width="15" height="15">
-												<path d="M24.0012 9.00049H10.0012V23.0005H24.0012V9.00049Z" fill="white" />
-											</mask>
-											<g mask="url(#mask0_56_407)">
-												<path d="M23.938 20.1589L23.8683 19.9489C23.7033 19.4584 23.1623 18.9468 22.6653 18.812L20.8261 18.3095C20.3273 18.1738 19.6158 18.3563 19.2508 18.7212L18.5851 19.3869C16.1659 18.7331 14.2689 16.836 13.6161 14.4173L14.2818 13.7516C14.6467 13.3867 14.8292 12.6761 14.6935 12.1773L14.1919 10.3371C14.0562 9.83923 13.5436 9.29828 13.054 9.13505L12.8441 9.06446C12.3535 8.90124 11.6539 9.06631 11.289 9.43122L10.2933 10.4279C10.1154 10.6048 10.0017 11.111 10.0017 11.1128C9.96686 14.2743 11.2065 17.3202 13.4428 19.5565C15.6736 21.7872 18.708 23.0251 21.8603 22.9985C21.8768 22.9985 22.3976 22.8866 22.5755 22.7096L23.5712 21.7139C23.9362 21.349 24.1012 20.6494 23.938 20.1589Z" fill="white" />
-											</g>
-										</g>
-									</g>
-									<defs>
-										<linearGradient id="paint0_linear_56_407" x1="16.5" y1="0" x2="16.5" y2="33" gradientUnits="userSpaceOnUse">
-											<stop stop-color="#FFE69D" />
-											<stop offset="0.480076" stop-color="#FFD14C" />
-											<stop offset="1" stop-color="#FFBE01" />
-										</linearGradient>
-										<clipPath id="clip0_56_407">
-											<rect width="33" height="33" fill="white" />
-										</clipPath>
-										<clipPath id="clip1_56_407">
-											<rect width="14" height="14" fill="white" transform="translate(10 9)" />
-										</clipPath>
-									</defs>
-								</svg>
-								<span>Phone</span>
-							</button>
-						</nav>
-						<div data-tabs-body class="contacts-tabs__content">
-							<div class="contacts-tabs__body">
-								<form class="contacts-form">
-									<label class="contacts-form__input-block">
-										<span class="contacts-form__icon">
-											<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M5.15625 8.42188C5.15625 11.6359 7.78594 14.2656 11 14.2656C14.2141 14.2656 16.8438 11.6359 16.8438 8.42188C16.8438 5.20781 14.2141 2.57812 11 2.57812C7.78594 2.57812 5.15625 5.20781 5.15625 8.42188ZM15.4688 8.42188C15.4688 10.8797 13.4578 12.8906 11 12.8906C8.54219 12.8906 6.53125 10.8797 6.53125 8.42188C6.53125 5.96406 8.54219 3.95312 11 3.95312C13.4578 3.95312 15.4688 5.96406 15.4688 8.42188Z" fill="#282828" />
-												<path d="M4.1938 20.5219C6.01567 18.7 8.42192 17.7031 11 17.7031C13.5782 17.7031 15.9844 18.7 17.8063 20.5219L18.786 19.5422C16.7063 17.4797 13.9391 16.3281 11 16.3281C8.06099 16.3281 5.2938 17.4797 3.21411 19.5422L4.1938 20.5219Z" fill="#282828" />
-											</svg>
-										</span>
-										<input autocomplete="off" type="text" name="form[]" placeholder="Numele dumneavoastră" class="contacts-form__input">
-									</label>
-									<label class="contacts-form__input-block">
-										<span class="contacts-form__icon">
-											<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M2.14996 3.74984V5.42199C2.14996 12.2887 7.71655 17.8553 14.5833 17.8553H16.25C17.1336 17.8553 17.85 17.139 17.85 16.2553V14.1178C17.85 13.4291 17.4093 12.8177 16.7559 12.5999L14.1032 11.7156C13.4187 11.4875 12.6662 11.7457 12.266 12.346L11.6585 13.2572C11.4334 13.5949 11.0101 13.7401 10.625 13.6118L9.35388 13.1881C8.16134 12.7906 7.24636 11.8234 6.91561 10.6106L6.39306 8.69459C6.26738 8.23376 6.5236 7.75502 6.97675 7.60397L7.47888 7.43659C8.16759 7.20702 8.58693 6.51053 8.46758 5.79444L8.08298 3.4868C7.95439 2.7153 7.28689 2.14984 6.50475 2.14984H3.74996C2.8663 2.14984 2.14996 2.86618 2.14996 3.74984ZM2.01663 3.74984C2.01663 2.79254 2.79267 2.0165 3.74996 2.0165H6.50475C7.35207 2.0165 8.0752 2.62909 8.2145 3.46488L8.5991 5.77252C8.72924 6.55333 8.27199 7.31277 7.52104 7.56308L7.01891 7.73046C6.63289 7.85913 6.41464 8.26695 6.5217 8.65951L7.04425 10.5755C7.36327 11.7453 8.24579 12.6782 9.39604 13.0616L10.6672 13.4853C10.9952 13.5946 11.3558 13.4709 11.5476 13.1833L12.155 12.2721C12.5886 11.6217 13.4038 11.342 14.1454 11.5891L16.7981 12.4734C17.5059 12.7093 17.9833 13.3717 17.9833 14.1178V16.2553C17.9833 17.2126 17.2073 17.9887 16.25 17.9887H14.5833C7.64291 17.9887 2.01663 12.3624 2.01663 5.42199V3.74984Z" fill="#282828" stroke="#282828" stroke-width="0.7" />
-											</svg>
-										</span>
-										<input autocomplete="off" type="text" name="form[]" placeholder="+40-xx-xxx-xxxx" class="contacts-form__input">
-									</label>
-									<button type="submit" class="contacts-form__button btn">
-										Contactați-ne
-									</button>
-								</form>
-							</div>
-							<div class="contacts-tabs__body">
-								<form class="contacts-form">
-									<label class="contacts-form__input-block">
-										<span class="contacts-form__icon">
-											<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M5.15625 8.42188C5.15625 11.6359 7.78594 14.2656 11 14.2656C14.2141 14.2656 16.8438 11.6359 16.8438 8.42188C16.8438 5.20781 14.2141 2.57812 11 2.57812C7.78594 2.57812 5.15625 5.20781 5.15625 8.42188ZM15.4688 8.42188C15.4688 10.8797 13.4578 12.8906 11 12.8906C8.54219 12.8906 6.53125 10.8797 6.53125 8.42188C6.53125 5.96406 8.54219 3.95312 11 3.95312C13.4578 3.95312 15.4688 5.96406 15.4688 8.42188Z" fill="#282828" />
-												<path d="M4.1938 20.5219C6.01567 18.7 8.42192 17.7031 11 17.7031C13.5782 17.7031 15.9844 18.7 17.8063 20.5219L18.786 19.5422C16.7063 17.4797 13.9391 16.3281 11 16.3281C8.06099 16.3281 5.2938 17.4797 3.21411 19.5422L4.1938 20.5219Z" fill="#282828" />
-											</svg>
-										</span>
-										<input autocomplete="off" type="text" name="form[]" placeholder="Numele dumneavoastră" class="contacts-form__input">
-									</label>
-									<label class="contacts-form__input-block">
-										<span class="contacts-form__icon">
-											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M4.615 19C4.155 19 3.771 18.846 3.463 18.538C3.15433 18.2293 3 17.845 3 17.385V6.615C3 6.155 3.15433 5.771 3.463 5.463C3.771 5.15433 4.155 5 4.615 5H19.385C19.845 5 20.229 5.15433 20.537 5.463C20.8457 5.771 21 6.155 21 6.615V17.385C21 17.845 20.846 18.229 20.538 18.537C20.2293 18.8457 19.845 19 19.385 19H4.615ZM12 12.115L4 6.885V17.385C4 17.5643 4.05767 17.7117 4.173 17.827C4.28833 17.9423 4.43567 18 4.615 18H19.385C19.5643 18 19.7117 17.9423 19.827 17.827C19.9423 17.7117 20 17.5643 20 17.385V6.885L12 12.115ZM12 11L19.692 6H4.308L12 11ZM4 6.885V6V17.385C4 17.5643 4.05767 17.7117 4.173 17.827C4.28833 17.9423 4.43567 18 4.615 18H4V6.885Z" fill="black" />
-											</svg>
-										</span>
-										<input autocomplete="off" type="text" name="form[]" placeholder="xxx@xxxx.com" class="contacts-form__input">
-									</label>
-									<button type="submit" class="contacts-form__button btn">
-										Contactați-ne
-									</button>
-								</form>
-							</div>
-							<div class="contacts-tabs__body">
-								<form class="contacts-form">
-									<label class="contacts-form__input-block">
-										<span class="contacts-form__icon">
-											<svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M5.15625 8.42188C5.15625 11.6359 7.78594 14.2656 11 14.2656C14.2141 14.2656 16.8438 11.6359 16.8438 8.42188C16.8438 5.20781 14.2141 2.57812 11 2.57812C7.78594 2.57812 5.15625 5.20781 5.15625 8.42188ZM15.4688 8.42188C15.4688 10.8797 13.4578 12.8906 11 12.8906C8.54219 12.8906 6.53125 10.8797 6.53125 8.42188C6.53125 5.96406 8.54219 3.95312 11 3.95312C13.4578 3.95312 15.4688 5.96406 15.4688 8.42188Z" fill="#282828" />
-												<path d="M4.1938 20.5219C6.01567 18.7 8.42192 17.7031 11 17.7031C13.5782 17.7031 15.9844 18.7 17.8063 20.5219L18.786 19.5422C16.7063 17.4797 13.9391 16.3281 11 16.3281C8.06099 16.3281 5.2938 17.4797 3.21411 19.5422L4.1938 20.5219Z" fill="#282828" />
-											</svg>
-										</span>
-										<input autocomplete="off" type="text" name="form[]" placeholder="Numele dumneavoastră" class="contacts-form__input">
-									</label>
-									<label class="contacts-form__input-block">
-										<span class="contacts-form__icon">
-											<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-												<path d="M2.14996 3.74984V5.42199C2.14996 12.2887 7.71655 17.8553 14.5833 17.8553H16.25C17.1336 17.8553 17.85 17.139 17.85 16.2553V14.1178C17.85 13.4291 17.4093 12.8177 16.7559 12.5999L14.1032 11.7156C13.4187 11.4875 12.6662 11.7457 12.266 12.346L11.6585 13.2572C11.4334 13.5949 11.0101 13.7401 10.625 13.6118L9.35388 13.1881C8.16134 12.7906 7.24636 11.8234 6.91561 10.6106L6.39306 8.69459C6.26738 8.23376 6.5236 7.75502 6.97675 7.60397L7.47888 7.43659C8.16759 7.20702 8.58693 6.51053 8.46758 5.79444L8.08298 3.4868C7.95439 2.7153 7.28689 2.14984 6.50475 2.14984H3.74996C2.8663 2.14984 2.14996 2.86618 2.14996 3.74984ZM2.01663 3.74984C2.01663 2.79254 2.79267 2.0165 3.74996 2.0165H6.50475C7.35207 2.0165 8.0752 2.62909 8.2145 3.46488L8.5991 5.77252C8.72924 6.55333 8.27199 7.31277 7.52104 7.56308L7.01891 7.73046C6.63289 7.85913 6.41464 8.26695 6.5217 8.65951L7.04425 10.5755C7.36327 11.7453 8.24579 12.6782 9.39604 13.0616L10.6672 13.4853C10.9952 13.5946 11.3558 13.4709 11.5476 13.1833L12.155 12.2721C12.5886 11.6217 13.4038 11.342 14.1454 11.5891L16.7981 12.4734C17.5059 12.7093 17.9833 13.3717 17.9833 14.1178V16.2553C17.9833 17.2126 17.2073 17.9887 16.25 17.9887H14.5833C7.64291 17.9887 2.01663 12.3624 2.01663 5.42199V3.74984Z" fill="#282828" stroke="#282828" stroke-width="0.7" />
-											</svg>
-										</span>
-										<input autocomplete="off" type="text" name="form[]" placeholder="+40-xx-xxx-xxxx" class="contacts-form__input">
-									</label>
-									<button type="submit" class="contacts-form__button btn">
-										Contactați-ne
-									</button>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			<MainContactsSection />
 		</section>
 	</main>
 </template>

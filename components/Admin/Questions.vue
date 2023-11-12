@@ -1,47 +1,45 @@
 <script setup lang="ts">
-import type { IServiceAndPrice } from '~/types';
+import type { IQuestion } from '~/types';
+
 
 const landing = useLandingStore()
-const { pricesAndServices } = storeToRefs(landing)
+const { questions } = storeToRefs(landing)
 
 const deleteDialogVisible = ref<boolean>(false)
 const updateDialogVisible = ref<boolean>(false)
+const selectedItem = ref<IQuestion>()
 
-const selectedItem = ref<IServiceAndPrice>()
-
-
-
-const updateItemHandle = (item: IServiceAndPrice) => {
+const updateItemHandle = async (item : IQuestion) => {
     selectedItem.value = item
     updateDialogVisible.value = true
 }
-const deleteItemHandle = (item: IServiceAndPrice) => {
+
+const deleteItemHandle = async (item: IQuestion) => {
     selectedItem.value = item
     deleteDialogVisible.value = true
 }
 
 const confirmItemDelete = async () => {
-    await landing.deletePricesSectionItem(selectedItem.value as IServiceAndPrice)
+    await landing.deleteQuestionSectionItem(selectedItem.value as IQuestion)
     deleteDialogVisible.value = false
 }
 
-const submitPricesAndService = async (item: IServiceAndPrice) => {
-    await landing.AddPricesSectionItem(item)
+const saveQuestionItem =  async (item: IQuestion) => {
+    await landing.AddQuestionSectionItem(item)
 }
 
-const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
-    item.id = id
-    await landing.updatePricesSectionItem(item)
-    updateDialogVisible.value = false
+const updateServiceItem = async (item: IQuestion, id: string) => {
+  item.id = id
+  await landing.updateQuestionSectionItem(item)
+  updateDialogVisible.value = false
 }
-
 </script>
 
 <template>
     <div>
 
         <el-dialog v-model="deleteDialogVisible" title="Warning" width="320px" draggable>
-            <span>Are you sure you want to delete the Price for service?</span>
+            <span>Are you sure you want to delete the question?</span>
             <template #footer>
             <span class="dialog-footer">
                 <el-button @click="deleteDialogVisible = false">Cancel</el-button>
@@ -54,10 +52,12 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
 
         <el-dialog v-model="updateDialogVisible" title="Update Service" width="98%" draggable>
             <div>
-                <AdminFormsPricesOfServices
-                    :submit-func="updatePricesAndService"
-                    func-button-label="Update Prices of Service"
-                    :default-item="selectedItem"
+                <AdminFormsQuestionItemForm
+                    :submit-func="updateServiceItem"
+                    func-button-label="Update Question"
+                    :default-question="selectedItem?.question"
+                    :default-answer="selectedItem?.answer"
+                    :id="selectedItem?.id"
                     v-if="updateDialogVisible"
                 />
             </div>
@@ -68,41 +68,40 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
             </template>
         </el-dialog>
 
-        <AdminUIPageHeader title="Section Prices" />
+        <AdminUIPageHeader title="Section Questions" />
         <div 
-            v-if="pricesAndServices.length == 0"
+            v-if="questions.length == 0"
             class="no-items"
         >
-            There are no prices of services at the moment, but you can add them.
+            There are no questions at the moment, but you can add them.
         </div>
-        <div v-else style="margin-bottom: 50px;">
-            <h3 class="header-service-item">List of Praces for Services:</h3>
+        <div v-else>
+            <h3 class="header-service-item">List of qustions:</h3>
             <TransitionGroup name="list" tag="ul">
                 <li
-                    v-for="prices in pricesAndServices"
-                    :key="prices.id" 
+                    v-for="question in questions"
+                    :key="question.id" 
                     class="list-sevices"      
                 >   
                   <AdminUIListServiceItem 
-                    :title="prices.title"
-                    @update-item="updateItemHandle(prices)"
-                    @delete-item="deleteItemHandle(prices)"
+                    :title="question.question"
+                    @update-item="updateItemHandle(question)"
+                    @delete-item="deleteItemHandle(question)"
                   />
                 </li>
             </TransitionGroup>
         </div>
-        <div>
-            <h3 class="header-service-item">Add new services and Prices:</h3>
-            <AdminFormsPricesOfServices 
-                :submit-func="submitPricesAndService"
-                func-button-label="Add Prices of Service"
+        <div style="margin-top: 40px;">
+            <h3 class="header-service-item">Add new question:</h3>
+            <AdminFormsQuestionItemForm 
+              :submit-func="saveQuestionItem"
+              func-button-label="Add Question"
             />
         </div>
     </div>
 </template>
 
 <style scoped>
-
 .no-items {
     display: flex;
     justify-content: center;
@@ -120,19 +119,11 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
     text-align: center;
 }
 
-
 .list-sevices {
     padding: 0px 10px;
     transition: background 0.6s ease;
 }
 .list-sevices:hover {
     background: rgb(243, 243, 243);
-}
-
-.additional-info {
-    border: 1px solid blue;
-    border-radius: 5px;
-    padding: 10px;
-    margin: 30px 0px 10px 30px;
 }
 </style>

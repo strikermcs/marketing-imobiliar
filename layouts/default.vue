@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { isWebp, initSliders } from '~/utils'
+import { isWebp, initSliders, spollers } from '~/utils'
 
 onMounted(() => {
   isWebp()
   initSliders()
+  spollers()
 })
 </script>
 

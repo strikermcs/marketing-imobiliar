@@ -6,6 +6,7 @@ import ShowNotification from './utils/notification';
 const userStore = useUserStore()
 const landing = useLandingStore()
 const notify = useNotificationStore()
+const loading = ref<boolean>(true)
 
 
 watch(() => notify.trigger, () => {
@@ -19,11 +20,17 @@ onBeforeMount(async() => {
     })
     await landing.getPromoSection()
     await landing.getServicesSectionItems()
+    await landing.getBenefitsSectionItems()
+    await landing.getQuestionSectionItems()
+    await landing.getPricesSectionItems()
+    await landing.getGallerySectionItems()
+    loading.value = false 
 })
 </script>
 
 <template>
-  <NuxtLayout>
+  <UILoader v-if="loading"/>
+  <NuxtLayout v-else>
     <NuxtPage />
   </NuxtLayout>
 </template>

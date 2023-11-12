@@ -1,5 +1,9 @@
 export type TAdminSettingTab = 'AdminMain' | 'AdminPromo' | 'AdminServices' |
-                                'AdminPricesAndServices'
+                                'AdminPricesAndServices' | 'AdminBenefits' |
+                                'AdminQuestions' | 'AdminTestimonials' |
+                                'AdminGallery'
+
+export type TServicePrice = 'PriceOnRequest' | 'Free' | number
 
 export interface IAdminMenuItem { 
     id: number
@@ -20,4 +24,43 @@ export interface IServiceSectionItem {
     title: string
     description: string
     image: string
+}
+
+export interface IQuestion {
+    id?: string
+    question: string
+    answer: string
+}
+
+export interface IPricesAndServicesContent {
+    id?: string
+    text: string
+}
+
+export interface IServicePrice {
+    id?: string
+    title: string
+    price: TServicePrice
+}
+
+export interface IServiceAndPrice {
+    id?: string
+    title: string
+    contentList?: Array<IPricesAndServicesContent>
+    services: Array<IServicePrice>
+    exampleUrl?: string
+    comment?: string
+} 
+
+export interface IGalleryImage {
+    id?: string
+    image: string
+}
+
+export interface ITestimonial {
+    id?: string
+    clientName: string
+    jobTitle: string
+    testimonial: string
+
 }

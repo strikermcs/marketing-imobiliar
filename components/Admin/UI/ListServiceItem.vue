@@ -1,10 +1,10 @@
 
 <script setup lang="ts">
-import { Edit, DeleteFilled } from '@element-plus/icons-vue'
+import { Edit, DeleteFilled, Box } from '@element-plus/icons-vue'
 
 interface Props {
     title: string
-    image: string
+    image?: string
 }
 
 defineProps<Props>()
@@ -16,7 +16,8 @@ defineEmits(['updateItem', 'deleteItem'])
     <div class="service-list-item">
         <div class="service-list-item-left">
             <div class="service-list-item-img">
-                <img :src="image" alt="image">
+                <img :src="image" alt="image" v-if="image">
+                <el-icon color="blue" size="24" v-else><Box /></el-icon>
             </div>
             <div class="service-list-item-title">
                 {{title}}

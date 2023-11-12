@@ -37,6 +37,7 @@ const updateServiceItem = async (item: IServiceSectionItem, id: string) => {
 </script>
 
 <template>
+  <div>
     <el-dialog v-model="deleteDialogVisible" title="Warning" width="320px" draggable>
         <span>Are you sure you want to delete the service?</span>
         <template #footer>
@@ -101,26 +102,17 @@ const updateServiceItem = async (item: IServiceSectionItem, id: string) => {
             />
         </div>
     </div>
+  </div>
 </template>
 
-<style>
-.avatar-uploader .avatar {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.avatar-uploader .el-upload {
-  border: 1px dashed var(--el-border-color);
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: var(--el-transition-duration-fast);
-}
-
-.avatar-uploader .el-upload:hover {
-  border-color: var(--el-color-primary);
+<style scoped>
+.header-service-item {
+    font-size: 18px;
+    font-weight: 800;
+    font-style: italic;
+    padding-bottom: 20px;
+    color: #707070;
+    text-align: center;
 }
 
 .no-items {
@@ -128,23 +120,6 @@ const updateServiceItem = async (item: IServiceSectionItem, id: string) => {
     justify-content: center;
     padding: 40px 5px;
     font-style: italic;
-    text-align: center;
-}
-
-.el-icon.avatar-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  text-align: center;
-}
-
-.header-service-item {
-    font-size: 18px;
-    font-weight: 800;
-    font-style: italic;
-    padding-bottom: 20px;
-    color: #707070;
     text-align: center;
 }
 
