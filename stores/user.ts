@@ -43,6 +43,18 @@ export const useUserStore = defineStore('user', {
                 });
         },
 
+        async updateUser(password: string) {
+            const notify = useNotificationStore()
+           
+           const auth = getAuth()
+           
+            updatePassword(auth.currentUser!, password).then(() => {
+                notify.SetNofication('Succes', 'Пользователь успешно обновлен', 'success')
+            }).catch(() => {
+                notify.SetNofication('Error', 'Ошибка обновления пользователя', 'error')
+            })
+        },
+
         singOut() {
             auth.signOut()
             this.user = null 

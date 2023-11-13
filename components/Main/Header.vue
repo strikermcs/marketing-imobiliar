@@ -5,7 +5,7 @@ const {width} = useWindowSize()
 </script>
 
 <template>
-	<header class="header">
+	<header class="header" id="header">
 		<div class="header__container">
 			<div class="header__body">
 				<a href="#" class="header__logo">

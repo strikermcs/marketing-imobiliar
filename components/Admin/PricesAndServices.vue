@@ -135,4 +135,14 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
     padding: 10px;
     margin: 30px 0px 10px 30px;
 }
+
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
 </style>

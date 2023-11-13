@@ -1,10 +1,19 @@
 <script setup lang="ts">
 import type { IServicePrice, TServicePrice } from '~/types';
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 
 const landing = useLandingStore() 
 const {width} = useWindowSize()
 
-const { promo, services, benefits, questions, pricesAndServices } = storeToRefs(landing)
+const { promo, 
+		services, 
+		benefits, 
+		questions, 
+		pricesAndServices,
+		gallery,
+		testimonials 
+	} = storeToRefs(landing)
 
 const totalServicesPrice = ref<number>(0)
 const servicePricesArray = ref<IServicePrice[]>([])
@@ -42,16 +51,27 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 		priceToogle = false
 	}	
 }
+
+onMounted(() => {
+  AOS.init({ 
+	disable: 'phone', 
+	offset: 200
+})
+
+})
 </script>
 
 <template>
 	<main class="page">
-		<section class="promo">	
+		<section class="promo" id="promo">	
 			<ClientOnly>
-				<UISocialsIconsBlock v-if="width > 992"/>	
+				<UISocialsIconsBlock data-aos="fade-right" v-if="width > 992"/>	
 			</ClientOnly>		
 			<div class="promo__container">
-				<div class="promo__body">
+				<div class="promo__body"
+						data-aos="fade-up"
+            			data-aos-once="true"
+				>
 					<h1 class="promo__title">
 						<span>
 							{{promo?.title}}
@@ -68,7 +88,7 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 							{{promo?.description}}
 						</p>
 					</div>
-					<a href="#" class="promo__link btn">
+					<a href="#service-prices" class="promo__link btn">
 						<svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M15.1526 7.14014V11.8084L19.9375 16.4766L15.1526 21.1448V25.813L24.7224 16.4766L15.1526 7.14014Z" fill="white" fill-opacity="0.85" />
 							<path d="M7.17773 7.14014L7.17773 11.8084L11.9627 16.4766L7.17773 21.1448L7.17773 25.813L16.7476 16.4766L7.17773 7.14014Z" fill="white" fill-opacity="0.5" />
@@ -90,10 +110,10 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 		<section class="about" id="about">
 			<div class="about__container">
 				<div class="about__body">
-					<div class="about__img">
+					<div class="about__img" data-aos="fade-right">
 						<img src="~/assets/img/about-image.svg" alt="about-image">
 					</div>
-					<div class="about__content">
+					<div class="about__content" data-aos="fade-left">
 						<h2 class="about__title title">
 							<IconsTitleCheck />
 							<span>
@@ -134,8 +154,10 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 					<div class="services__wrapper swiper-wrapper">
 						<article 
 							class="services__slide swiper-slide"
-							v-for="service in services"
+							v-for="(service, index) in services"
 							:key="service.id"
+							data-aos="fade-up"
+							:data-aos-delay="index * 100"
 						>
 							<div class="services__slide-img">
 								<img :src="service.image" alt="image-1">
@@ -174,8 +196,10 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 				<div class="advantages__items">
 					<article 
 						class="advantages__item"
-						v-for="avantage in benefits"
+						v-for="(avantage, index) in benefits"
 						:key="avantage.id"
+						data-aos="flip-right"
+						:data-aos-delay="index * 100"
 					>
 						<div class="advantages__item-img">
 							<img :src="avantage.image" alt="image-1">
@@ -203,8 +227,10 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 				<div data-spollers class="spollers">
 					<details 
 						class="spollers__item"
-						v-for="question in questions"
+						v-for="(question, index) in questions"
 						:key="question.id"
+						:data-aos="index % 2 === 0 ? 'fade-right': 'fade-left'"
+						:data-aos-delay="index * 200"
 					>
 						<summary class="spollers__title">
 							<span class="spollers__counter"></span>
@@ -244,7 +270,7 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 					</span>
 				</h2>
 				<form action="#" class="service-prices__form">
-					<div class="service-prices__items">
+					<div class="service-prices__items" data-aos="fade-right">
 						<div 
 							class="service-prices__item item-prices"
 							v-for="prices in pricesAndServices"
@@ -291,7 +317,7 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 							</div>
 						</div>	
 					</div>
-					<div class="service-prices__total">
+					<div class="service-prices__total" data-aos="fade-left">
 						<div class="service-prices__img">
 							<picture><source srcset="~/assets/img/prices-image.webp" type="image/webp"><img src="~/assets/img/prices-image.png" alt="prices-image"></picture>
 						</div>
@@ -326,28 +352,17 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 						GALERIE
 					</span>
 				</h2>
-				<div class="gallery__body">
+				<div class="gallery__body" data-aos="zoom-in">
 					<div class="gallery__slider swiper">
 						<div class="gallery__wrapper swiper-wrapper">
-							<div class="gallery__slide swiper-slide">
-								<a href="#" class="gallery__slide-img">
-									<picture><source srcset="img/gallery/image-1.webp" type="image/webp"><img src="img/gallery/image-1.jpg" alt="image-1"></picture>
-								</a>
-							</div>
-							<div class="gallery__slide swiper-slide">
-								<a href="#" class="gallery__slide-img">
-									<picture><source srcset="img/gallery/image-2.webp" type="image/webp"><img src="img/gallery/image-2.jpg" alt="image-2"></picture>
-								</a>
-							</div>
-							<div class="gallery__slide swiper-slide">
-								<a href="#" class="gallery__slide-img">
-									<picture><source srcset="img/gallery/image-3.webp" type="image/webp"><img src="img/gallery/image-3.jpg" alt="image-3"></picture>
-								</a>
-							</div>
-							<div class="gallery__slide swiper-slide">
-								<a href="#" class="gallery__slide-img">
-									<picture><source srcset="img/gallery/image-1.webp" type="image/webp"><img src="img/gallery/image-1.jpg" alt="image-1"></picture>
-								</a>
+							<div 
+								class="gallery__slide swiper-slide"
+								v-for="img in gallery"
+								:key="img.id"
+							>
+								<div class="gallery__slide-img">
+									<img :src="img.image" alt="image">
+								</div>
 							</div>
 						</div>
 						<div class="swiper-scrollbar"></div>
@@ -368,7 +383,7 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 					</div>
 				</div>
 				<div class="icon-swipe">
-					<picture><source srcset="img/icon/swipe.webp" type="image/webp"><img src="img/icon/swipe.png" alt="swipe icon"></picture>
+					<picture><source srcset="~/assets/img/icon/swipe.webp" type="image/webp"><img src="~/assets/img/icon/swipe.png" alt="swipe icon"></picture>
 				</div>
 				<a href="#" class="gallery__link btn">
 					Portofoliu
@@ -383,85 +398,30 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 						RECENZII
 					</span>
 				</h2>
-				<div class="reviews__body">
-					<div class="reviews__inner">
+				<div class="reviews__body" >
+					<div class="reviews__inner" data-aos="flip-left">
 						<div class="reviews__slider swiper">
 							<div class="reviews__wrapper swiper-wrapper">
-								<div class="reviews__slide swiper-slide">
+								<div 
+									class="reviews__slide swiper-slide"
+									v-for="testimonial in testimonials"
+									:key="testimonial.id"
+								>
 									<div class="reviews__slide-head">
 										<div class="reviews__slide-icon">
-											C
+											{{Array.from(testimonial.clientName)[0]}}
 										</div>
 										<div class="reviews__slide-info">
 											<div class="reviews__slide-name">
-												Cristi Feres
+												{{testimonial.clientName}}
 											</div>
 											<div class="reviews__slide-owner">
-												Proprietar
+												{{testimonial.jobTitle}}
 											</div>
 										</div>
 									</div>
 									<div class="reviews__slide-text">
-										Am colaborat cu MARKETING IMOBILIAR pentru vânzarea proprietății mele și am
-										fost
-										extrem de mulțumit de serviciile oferite. Echipa a fost mereu disponibilă să
-										răspundă la întrebări și să ofere clarificări ori de câte ori a fost
-										necesar.
-										Grație strategiilor lor de marketing, am reușit să vând proprietatea într-un
-										timp mult mai scurt decât mă așteptam! Recomand cu căldură echipa de la
-										MARKETING IMOBILIAR oricui caută servicii profesionale de marketing
-										imobiliar.
-										Echipa lor dedicată și abordarea inovatoare în promovare m-au convins că am
-										făcut alegerea corectă!
-									</div>
-								</div>
-								<div class="reviews__slide swiper-slide">
-									<div class="reviews__slide-head">
-										<div class="reviews__slide-icon">
-											F
-										</div>
-										<div class="reviews__slide-info">
-											<div class="reviews__slide-name">
-												Feres Cristi
-											</div>
-											<div class="reviews__slide-owner">
-												Proprietar
-											</div>
-										</div>
-									</div>
-									<div class="reviews__slide-text">
-										Am colaborat cu MARKETING IMOBILIAR pentru vânzarea proprietății mele și am
-										fost
-										extrem de mulțumit de serviciile oferite. Echipa a fost mereu disponibilă să
-										răspundă la întrebări și să ofere Recomand am reușicu căldură echipa de la
-										MARKETING IMOBILIAR oricui caută servicii profesionale de marketing
-										imobiliar.
-										Echipa lor dedicată și abordarea inovatoare în promovare m-au convins că am
-										făcut alegerea corectă!
-									</div>
-								</div>
-								<div class="reviews__slide swiper-slide">
-									<div class="reviews__slide-head">
-										<div class="reviews__slide-icon">
-											C
-										</div>
-										<div class="reviews__slide-info">
-											<div class="reviews__slide-name">
-												Cristi Feres
-											</div>
-											<div class="reviews__slide-owner">
-												Proprietar
-											</div>
-										</div>
-									</div>
-									<div class="reviews__slide-text">
-										Am colaborat cu MARKETING IMOBILIAR pentru vânzarea proprietății mele și am
-										fost
-										extrem de mulțumit de serviciile oferite. Echipa a fost mereu disponibilă să
-										răspundă la întrebări și să ofere clarificări ori de câte ori a fost
-										necesar.
-										Grație strategiilor lor de marketing, am reușit să vând proprietatea într-un
-										timp mult mai scurt decât mă așteptam!
+										{{testimonial.testimonial}}
 									</div>
 								</div>
 							</div>
@@ -484,11 +444,11 @@ const priceServiceClickHandler = (price: IServicePrice) => {
 					</div>
 				</div>
 				<div class="icon-swipe">
-					<picture><source srcset="img/icon/swipe.webp" type="image/webp"><img src="img/icon/swipe.png" alt="swipe icon"></picture>
+					<picture><source srcset="~/assets/img/icon/swipe.webp" type="image/webp"><img src="~/assets/img/icon/swipe.png" alt="swipe icon"></picture>
 				</div>
 			</div>
 		</section>
-		<section class="contacts" id="contacts">
+		<section class="contacts" id="contacts" data-aos="slide-up">
 			<MainContactsSection />
 		</section>
 	</main>

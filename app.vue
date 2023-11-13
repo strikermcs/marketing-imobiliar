@@ -24,6 +24,7 @@ onBeforeMount(async() => {
     await landing.getQuestionSectionItems()
     await landing.getPricesSectionItems()
     await landing.getGallerySectionItems()
+    await landing.getTestimonialSectionItems()
     loading.value = false 
 })
 </script>

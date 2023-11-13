@@ -47,8 +47,32 @@ export const initSliders = ()  => {
 
             breakpoint.addEventListener("change", checker);
             checker();
+
+			if (!!window.IntersectionObserver) {
+				let observer = new IntersectionObserver(
+				  (entries, observer) => {
+					entries.forEach((entry) => {
+					  if (entry.isIntersecting) {
+						swiper.autoplay.start()
+						// You can remove the observer if you do not need it
+						// observer.unobserve(entry.target);
+					  } else {
+						swiper.autoplay.stop()
+					  }
+					});
+				  },
+				  { rootMargin: "0px 0px -200px 0px" }
+				);
+		  
+				// Add the observer to you swiper
+				observer.observe(document.querySelector(".services__slider"));
+			  } else {
+				// You can use the polyfill or just start the autoplay
+			  }
+			}
+
         }
-    };
+    
 
     //@ts-ignore
     resizableSwiper("(max-width: 549.98px)", ".services__slider", {
@@ -64,12 +88,10 @@ export const initSliders = ()  => {
             el: ".swiper-scrollbar",
             draggable: true,
         },
-        autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-        },
+        autoplay: false,
         loop: true
     });
+
 
     if (document.querySelector(".gallery__slider")) {
         // Вказуємо склас потрібного слайдера
@@ -169,6 +191,7 @@ export const initSliders = ()  => {
             on: {},
         });
     }
+	
 }
 
 export const spollers = () => {

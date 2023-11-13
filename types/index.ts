@@ -5,6 +5,8 @@ export type TAdminSettingTab = 'AdminMain' | 'AdminPromo' | 'AdminServices' |
 
 export type TServicePrice = 'PriceOnRequest' | 'Free' | number
 
+export type TSocial = 'Youtube' | 'LinkedIn' | 'Instagram' | 'Tiktok' | 'Facebook'
+
 export interface IAdminMenuItem { 
     id: number
     text: string
@@ -62,5 +64,18 @@ export interface ITestimonial {
     clientName: string
     jobTitle: string
     testimonial: string
+}
 
+export interface ISocialsContacts {
+    id?: string
+    social: TSocial
+    link: string
+}
+
+export interface IAdditionalInfo {
+    id?: string
+    tel: string
+    whatsApp: string
+    email: string
+    portfolioUrl: string
 }

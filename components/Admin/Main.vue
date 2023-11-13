@@ -4,7 +4,10 @@
 
 <template>
     <div>
-        Main
+        <AdminUIPageHeader title="Section Main"/>
+        <div>
+            
+        </div>
     </div>
 </template>
 
