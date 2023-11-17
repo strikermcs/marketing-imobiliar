@@ -1,4 +1,11 @@
 <script setup lang="ts">
+const userStore = useUserStore()
+
+onBeforeMount(() => {
+  if (userStore.user) {
+      return navigateTo('/admin')
+    }
+}),
 
 definePageMeta({
     layout: 'auth'
@@ -16,11 +23,7 @@ definePageMeta({
             </div>
         </div>
         <section class="section sign-in">
-            <form action="">
-                <input type="text" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Password">
-                <button>Sign In</button>
-            </form>
+            <AdminFormsLogin />
         </section>
 </div>
 </template>
@@ -28,7 +31,7 @@ definePageMeta({
 <style scoped>
 .auth-wrapper {
   width: 320px;
-  height: 500px;
+  height: 540px;
   padding-bottom: 20px;
   color: #fefefe;
   background: #fefefe;

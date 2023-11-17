@@ -5,8 +5,11 @@ import ShowNotification from './utils/notification';
 
 const userStore = useUserStore()
 const landing = useLandingStore()
+const contacts = useContactsStore()
 const notify = useNotificationStore()
+const mails = useMailStore()
 const loading = ref<boolean>(true)
+
 
 
 watch(() => notify.trigger, () => {
@@ -25,6 +28,9 @@ onBeforeMount(async() => {
     await landing.getPricesSectionItems()
     await landing.getGallerySectionItems()
     await landing.getTestimonialSectionItems()
+    await contacts.getAdditionalInfo()
+    await contacts.getSocialsItems()
+    await mails.getMailsItems()
     loading.value = false 
 })
 </script>

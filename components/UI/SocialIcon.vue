@@ -11,7 +11,7 @@ const props = defineProps<Props>()
 </script>
 
 <template>
-    <a :href="link" target="_blank">
+    <a :href="link" target="_blank" class="socials-block__link">
         <Icon :name="social" />
     </a>
 </template>

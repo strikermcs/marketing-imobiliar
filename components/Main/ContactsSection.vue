@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { IContactMail, IMail } from '~/types';
+
 
 export type  TContactType = 'Email' | 'Phone' | 'WhatsApp'
 
@@ -9,11 +11,11 @@ interface IFormContent {
 }
 
 
-const formContent = reactive<Partial<IFormContent>>({
-	username: '',
-	contact: '',
-	type: 'WhatsApp'
-})
+const mailStore = useMailStore()
+
+const notify = useNotificationStore()
+const username = ref<string>()
+const contact = ref<string>()
 
 const tabs = ref([
     {
@@ -37,6 +39,26 @@ const tabs = ref([
 
 const activeTab = ref(tabs.value[0])
 
+
+const submitContactHandler = async () => {
+	if(username.value && contact.value)  {
+		const mail: IMail<IContactMail> = {
+			type: 'contact',
+			isRead: false,
+			mail: {
+				username: username.value,
+				type: activeTab.value.icon,
+				contact: contact.value
+			}
+		}
+
+		await mailStore.AddMailItem(mail)
+		username.value = ''
+		contact.value = ''
+	} else {
+		notify.SetNofication('Error', 'Fill in all fields, please!', 'warning')
+	}
+}
 </script>
 
 <template>
@@ -63,7 +85,6 @@ const activeTab = ref(tabs.value[0])
 					<div class="contacts-tabs__body">
 						<form 
 							class="contacts-form"
-							ref="formRef"
 						>
 							<label class="contacts-form__input-block">
 								<span class="contacts-form__icon">
@@ -72,7 +93,7 @@ const activeTab = ref(tabs.value[0])
 										<path d="M4.1938 20.5219C6.01567 18.7 8.42192 17.7031 11 17.7031C13.5782 17.7031 15.9844 18.7 17.8063 20.5219L18.786 19.5422C16.7063 17.4797 13.9391 16.3281 11 16.3281C8.06099 16.3281 5.2938 17.4797 3.21411 19.5422L4.1938 20.5219Z" fill="#282828" />
 									</svg>
 								</span>
-								<input autocomplete="off" type="text" name="form[]" placeholder="Numele dumneavoastră" class="contacts-form__input">
+								<input autocomplete="off" type="text" v-model="username" placeholder="Numele dumneavoastră" class="contacts-form__input">
 							</label>
 							<label class="contacts-form__input-block">
 								<span class="contacts-form__icon">
@@ -84,9 +105,9 @@ const activeTab = ref(tabs.value[0])
 										<path d="M2.14996 3.74984V5.42199C2.14996 12.2887 7.71655 17.8553 14.5833 17.8553H16.25C17.1336 17.8553 17.85 17.139 17.85 16.2553V14.1178C17.85 13.4291 17.4093 12.8177 16.7559 12.5999L14.1032 11.7156C13.4187 11.4875 12.6662 11.7457 12.266 12.346L11.6585 13.2572C11.4334 13.5949 11.0101 13.7401 10.625 13.6118L9.35388 13.1881C8.16134 12.7906 7.24636 11.8234 6.91561 10.6106L6.39306 8.69459C6.26738 8.23376 6.5236 7.75502 6.97675 7.60397L7.47888 7.43659C8.16759 7.20702 8.58693 6.51053 8.46758 5.79444L8.08298 3.4868C7.95439 2.7153 7.28689 2.14984 6.50475 2.14984H3.74996C2.8663 2.14984 2.14996 2.86618 2.14996 3.74984ZM2.01663 3.74984C2.01663 2.79254 2.79267 2.0165 3.74996 2.0165H6.50475C7.35207 2.0165 8.0752 2.62909 8.2145 3.46488L8.5991 5.77252C8.72924 6.55333 8.27199 7.31277 7.52104 7.56308L7.01891 7.73046C6.63289 7.85913 6.41464 8.26695 6.5217 8.65951L7.04425 10.5755C7.36327 11.7453 8.24579 12.6782 9.39604 13.0616L10.6672 13.4853C10.9952 13.5946 11.3558 13.4709 11.5476 13.1833L12.155 12.2721C12.5886 11.6217 13.4038 11.342 14.1454 11.5891L16.7981 12.4734C17.5059 12.7093 17.9833 13.3717 17.9833 14.1178V16.2553C17.9833 17.2126 17.2073 17.9887 16.25 17.9887H14.5833C7.64291 17.9887 2.01663 12.3624 2.01663 5.42199V3.74984Z" fill="#282828" stroke="#282828" stroke-width="0.7" />
 									</svg>
 								</span>
-								<input autocomplete="off" type="text" name="form[]" :placeholder="activeTab.icon === 'Email' ? 'xxx@xxxx.com' : '+40-xx-xxx-xxxx'" class="contacts-form__input">
+								<input autocomplete="off" type="text" v-model="contact" :placeholder="activeTab.icon === 'Email' ? 'xxx@xxxx.com' : '+40-xx-xxx-xxxx'" class="contacts-form__input">
 							</label>
-							<button type="submit" class="contacts-form__button btn">
+							<button  class="contacts-form__button btn" @click.prevent="submitContactHandler">
 								Contactați-ne
 							</button>
 						</form>

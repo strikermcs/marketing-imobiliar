@@ -47,7 +47,7 @@ export const useContactsStore = defineStore('contacts', {
                     this.additionalInfo.email = item.email
                     this.additionalInfo.portfolioUrl = item.portfolioUrl
                 } 
-                notify.SetNofication("Success", "Promo section is successfully updated", "success")
+                notify.SetNofication("Success", "Aditional Info section is successfully updated", "success")
             }) 
         },
 
@@ -67,7 +67,7 @@ export const useContactsStore = defineStore('contacts', {
             }
         },
 
-        async AddServiceSectionItem(item: ISocialsContacts) {
+        async AddSocialItemItem(item: ISocialsContacts) {
             const notify = useNotificationStore()
             try {
                 const docRef = await addDoc(collection(db, "socials"), item)
@@ -79,7 +79,7 @@ export const useContactsStore = defineStore('contacts', {
             }
         },
 
-        async deleteServiceSectionItem(item: ISocialsContacts) {
+        async deleteSocialItem(item: ISocialsContacts) {
             const notify = useNotificationStore()
             try {
                 const docRef = doc(db, "socials", item.id as string)
@@ -92,7 +92,7 @@ export const useContactsStore = defineStore('contacts', {
             }
         },
 
-        async updateServiceSectionItem(item: ISocialsContacts) {
+        async updateSocialItem(item: ISocialsContacts) {
             const notify = useNotificationStore()
             try {
                 const docRef = doc(db, "socials", item.id as string)

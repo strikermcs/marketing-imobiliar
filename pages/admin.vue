@@ -1,19 +1,39 @@
 <script setup lang="ts">
-import type { TAdminSettingTab } from '~/types';
+import { Message, Document, CloseBold, SwitchButton } from '@element-plus/icons-vue';
 
+const userStore = useUserStore()
+
+const router = useRouter()
+
+const mailPage = ref<boolean>(false)
 const activeTab: any = inject('settingTab')
 
 const page = computed(() => {
+    if(mailPage.value) {
+        return resolveComponent('AdminMail')
+    }
     return resolveComponent(activeTab.value)
 })
 
+const singOutHandle = () => {
+    userStore.singOut()
+    router.push('/')
+}
+
 definePageMeta({
-    layout: 'admin'
+    layout: 'admin',
+    middleware: 'auth'
 })
 </script>
 
 <template>
     <div class="page-main">
+        <div class="admin-icons">
+            <el-icon size="24" class="admin-icon" @click="mailPage = true" v-if="!mailPage"><Message /></el-icon>
+            <el-icon size="24" class="admin-icon" @click="mailPage = false" v-else><CloseBold /></el-icon>
+            <el-icon size="24" class="admin-icon" @click="router.push('/')"><Document /></el-icon>
+            <el-icon size="24" class="admin-icon" @click="singOutHandle"><SwitchButton /></el-icon>
+        </div>
         <Transition name="fade" mode="out-in">
             <component :is="page" />
         </Transition>
@@ -21,6 +41,27 @@ definePageMeta({
 </template>
 
 <style scoped>
+.page-main {
+    position: relative;
+}
+
+.admin-icons {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    display: flex;
+    gap: 10px;
+}
+
+.admin-icon {
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+.admin-icon:hover {
+    transform: scale(1.1);
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s ease;

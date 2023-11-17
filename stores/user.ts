@@ -1,21 +1,11 @@
 import type{ User } from "firebase/auth";
 import { 
     signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword, 
-    updateProfile,
     getAuth,
     updatePassword,
  } from "firebase/auth";
-import { 
-    collection,  
-    query, 
-    getDocs,
-    doc,
-    where,
-    updateDoc,
-    Firestore, 
- } from 'firebase/firestore'
-import { db, auth } from '@/libs/firebase' 
+
+import { auth } from '@/libs/firebase' 
 
 
 interface IUserStoreState {
@@ -32,10 +22,11 @@ export const useUserStore = defineStore('user', {
     actions: {
       
         login(email: string, password: string ): void {
+            const router = useRouter()
             signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     this.user = userCredential.user
-                    
+                    router.push('/admin')
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -47,11 +38,11 @@ export const useUserStore = defineStore('user', {
             const notify = useNotificationStore()
            
            const auth = getAuth()
-           
+           console.log(password, auth.currentUser)
             updatePassword(auth.currentUser!, password).then(() => {
                 notify.SetNofication('Succes', 'Пользователь успешно обновлен', 'success')
-            }).catch(() => {
-                notify.SetNofication('Error', 'Ошибка обновления пользователя', 'error')
+            }).catch((error) => {
+                notify.SetNofication('Error', `Ошибка обновления пользователя. Error: ${error}`, 'error')
             })
         },
 

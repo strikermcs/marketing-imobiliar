@@ -6,6 +6,7 @@ export type TAdminSettingTab = 'AdminMain' | 'AdminPromo' | 'AdminServices' |
 export type TServicePrice = 'PriceOnRequest' | 'Free' | number
 
 export type TSocial = 'Youtube' | 'LinkedIn' | 'Instagram' | 'Tiktok' | 'Facebook'
+export type TMailType = 'order' | 'contact'
 
 export interface IAdminMenuItem { 
     id: number
@@ -78,4 +79,27 @@ export interface IAdditionalInfo {
     whatsApp: string
     email: string
     portfolioUrl: string
+}
+
+export interface IContactMail {
+    username: string
+    type: string
+    contact: string
+}
+
+export interface IOrderMail {
+    username : string
+    email?: string
+    phone?: string
+    services: IServicePrice[]
+    price: number
+    text?: string
+
+}
+
+export interface IMail<T> {
+    id?: string
+    type: TMailType
+    mail: T
+    isRead: boolean
 }
