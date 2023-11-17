@@ -2,6 +2,9 @@
 import { Message, Document, CloseBold, SwitchButton } from '@element-plus/icons-vue';
 
 const userStore = useUserStore()
+const mailStore = useMailStore()
+
+const { mails } = storeToRefs(mailStore)
 
 const router = useRouter()
 
@@ -20,6 +23,10 @@ const singOutHandle = () => {
     router.push('/')
 }
 
+const getUnreadMessages = computed(() => {
+    return mails.value.filter(m => m.isRead === false).length
+})
+
 definePageMeta({
     layout: 'admin',
     middleware: 'auth'
@@ -29,7 +36,9 @@ definePageMeta({
 <template>
     <div class="page-main">
         <div class="admin-icons">
-            <el-icon size="24" class="admin-icon" @click="mailPage = true" v-if="!mailPage"><Message /></el-icon>
+            <el-badge :value="getUnreadMessages" class="item" v-if="!mailPage" :hidden="getUnreadMessages === 0">
+                <el-icon size="24" class="admin-icon" @click="mailPage = true" ><Message /></el-icon>
+            </el-badge>
             <el-icon size="24" class="admin-icon" @click="mailPage = false" v-else><CloseBold /></el-icon>
             <el-icon size="24" class="admin-icon" @click="router.push('/')"><Document /></el-icon>
             <el-icon size="24" class="admin-icon" @click="singOutHandle"><SwitchButton /></el-icon>
@@ -74,5 +83,9 @@ definePageMeta({
 
 .page-main {
     margin-top: 40px;
+}
+
+.item {
+  margin-right: 10px;
 }
 </style>
