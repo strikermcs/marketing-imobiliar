@@ -2,7 +2,8 @@ import { initializeApp } from 'firebase/app'
 import { getAuth } from "firebase/auth"
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
-    
+
+   
     const firebaseConfig = {
         apiKey: "AIzaSyCE6OhIiKardza0vXae-AcCLX-90EVmz8A",
         authDomain: "imobular.firebaseapp.com",
@@ -13,6 +14,7 @@ import { getStorage } from 'firebase/storage'
         measurementId: "G-6CQCW1TT7G"
     };
   
+
     const app = initializeApp(firebaseConfig)
 
     const auth = getAuth(app)

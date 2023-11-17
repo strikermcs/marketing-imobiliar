@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const contacts = useContactsStore()
+
+const { socials, additionalInfo } = storeToRefs(contacts)
 
 </script>
 
@@ -53,27 +56,27 @@
 						</h4>
 						<ul class="footer__col-list">
 							<li class="footer__col-item">
-								<a data-goto=".about" href="#" class="footer__col-link">
+								<a  href="#about" class="footer__col-link">
 									Despre noi
 								</a>
 							</li>
 							<li class="footer__col-item">
-								<a data-goto=".services" href="#" class="footer__col-link">
+								<a  href="#services" class="footer__col-link">
 									Servicii
 								</a>
 							</li>
 							<li class="footer__col-item">
-								<a data-goto=".advantages" href="#" class="footer__col-link">
+								<a href="#advantages" class="footer__col-link">
 									Avantaje
 								</a>
 							</li>
 							<li class="footer__col-item">
-								<a data-goto=".service-prices" href="#" class="footer__col-link">
+								<a  href="#service-prices" class="footer__col-link">
 									Preturi
 								</a>
 							</li>
 							<li class="footer__col-item">
-								<a data-goto=".gallery" href="#" class="footer__col-link">
+								<a  href="#gallery" class="footer__col-link">
 									Galerie
 								</a>
 							</li>
@@ -85,18 +88,16 @@
 						</h4>
 						<ul class="footer__col-list">
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link">
-									Companie
+								S.C. MARKETING IMOBILIAR SRL
+							</li>
+							<li class="footer__col-item">
+								<a :href="`tel:${additionalInfo?.tel}`" class="footer__col-link">
+									TEL. {{additionalInfo?.tel}}
 								</a>
 							</li>
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link">
-									Phone number
-								</a>
-							</li>
-							<li class="footer__col-item">
-								<a href="#" class="footer__col-link">
-									Email
+								<a :href="`mailto:${additionalInfo?.email}`" class="footer__col-link">
+									{{additionalInfo?.email}}
 								</a>
 							</li>
 							<li class="footer__col-item">
@@ -113,25 +114,12 @@
 							</li>
 						</ul>
 						<ul class="footer__soc">
-							<li class="footer__soc-item">
-								<a href="#" class="footer__soc-link">
-									<img src="~/assets/img/icon/youtube.svg" alt="youtube">
-								</a>
-							</li>
-							<li class="footer__soc-item">
-								<a href="#" class="footer__soc-link">
-									<img src="~/assets/img/icon/linkedin.svg" alt="linkedin">
-								</a>
-							</li>
-							<li class="footer__soc-item">
-								<a href="#" class="footer__soc-link">
-									<img src="~/assets/img/icon/instagram.svg" alt="instagram">
-								</a>
-							</li>
-							<li class="footer__soc-item">
-								<a href="#" class="footer__soc-link">
-									<img src="~/assets/img/icon/tiktok.svg" alt="tiktok">
-								</a>
+							<li 
+								class="footer__soc-item"
+								v-for="social in socials"
+								:key="social.id"
+							>
+								<UISocialIconFooter :social="social.social" :link="social.link"/>
 							</li>
 						</ul>
 					</div>
