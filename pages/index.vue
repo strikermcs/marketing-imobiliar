@@ -68,13 +68,13 @@ const orderButtonClickHandler = () => {
 
 const submitedOrderHandler = () => {
 	showOrderDialogVisible.value = false
+	
 }
 
 onMounted(() => {
   AOS.init({ 
-	disable: 'phone', 
 	offset: 200
-})
+}) 
 
 })
 </script>

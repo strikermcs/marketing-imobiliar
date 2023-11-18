@@ -1,11 +1,11 @@
-import type{ User } from "firebase/auth";
+import type { User } from "firebase/auth";
 import { 
     signInWithEmailAndPassword, 
     getAuth,
     updatePassword,
  } from "firebase/auth";
 
-import { auth } from '@/libs/firebase' 
+import { auth } from '~/libs/firebase'
 
 
 interface IUserStoreState {
@@ -34,15 +34,21 @@ export const useUserStore = defineStore('user', {
                 });
         },
 
-        async updateUser(password: string) {
+        async updateUser(password: string, callback?: Function) {
             const notify = useNotificationStore()
            
-           const auth = getAuth()
-           console.log(password, auth.currentUser)
-            updatePassword(auth.currentUser!, password).then(() => {
-                notify.SetNofication('Succes', 'Пользователь успешно обновлен', 'success')
+            const authUser = getAuth()
+            
+          
+            updatePassword(authUser.currentUser!, password).then(() => {
+                notify.SetNofication('Success', 'User password update successfully', 'success')
             }).catch((error) => {
-                notify.SetNofication('Error', `Ошибка обновления пользователя. Error: ${error}`, 'error')
+                if(callback){
+                    callback()
+                } else {
+                    notify.SetNofication("Error", "User password update error!", "error")
+                }
+                
             })
         },
 

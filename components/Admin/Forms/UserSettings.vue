@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
+import { getAuth, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
 
 const ruleFormRef = ref<FormInstance>()
 
 const user = useUserStore()
+
+
+const reauthenticateUserDialog = ref<boolean>(false)
 
 const validatePass = (rule: any, value: any, callback: any) => {
   if (value === '') {
@@ -40,7 +44,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      user.updateUser(ruleForm.pass)
+      user.updateUser(ruleForm.pass, reauthenticateUserShowDialog)
+      resetForm(ruleFormRef.value)
     } else {
       console.log('error submit!')
       return false
@@ -52,10 +57,39 @@ const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
 }
+
+const reauthenticateUserShowDialog = () => {
+  reauthenticateUserDialog.value = true
+}
+
+const reauthenticateUser = (email: string, password: string) => {
+  const auth = getAuth()
+  const userCurrent = auth.currentUser
+
+  const credential = EmailAuthProvider.credential(email, password)
+
+  reauthenticateWithCredential(userCurrent!, credential).then(() => {
+    user.updateUser(ruleForm.pass)
+    reauthenticateUserDialog.value = false
+  })
+
+} 
 </script>
 
 <template>
     <div>
+
+      <el-dialog v-model="reauthenticateUserDialog" title="Login" width="320px" draggable>
+            <div>
+                <AdminFormsUserReAuth @submit="reauthenticateUser"/>
+            </div>
+            <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="reauthenticateUserDialog = false">Cancel</el-button>
+            </span>
+            </template>
+        </el-dialog>
+
         <el-form
             ref="ruleFormRef"
             :model="ruleForm"
