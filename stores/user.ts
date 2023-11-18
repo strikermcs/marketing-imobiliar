@@ -3,6 +3,7 @@ import {
     signInWithEmailAndPassword, 
     getAuth,
     updatePassword,
+    sendPasswordResetEmail
  } from "firebase/auth";
 
 import { auth } from '~/libs/firebase'
@@ -49,6 +50,17 @@ export const useUserStore = defineStore('user', {
                     notify.SetNofication("Error", "User password update error!", "error")
                 }
                 
+            })
+        },
+
+        async resetUserPassword(email: string) {
+            const notify = useNotificationStore()
+            const auth = getAuth()
+
+            sendPasswordResetEmail(auth, email).then(() => {
+                notify.SetNofication('Success', 'Password reset email sent!', 'success')
+            }).catch((error) => {
+                notify.SetNofication("Error", `User reset email sent error! Error: ${error.code} ${error.message}`, "error")
             })
         },
 
