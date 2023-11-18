@@ -17,32 +17,32 @@ const {width} = useWindowSize()
 					<button type="button" class="menu__icon icon-menu" @click="toggleMainMenu"><span></span></button>
 					<nav class="menu__body" id="main-menu">
 						<ul class="menu__list">
-							<li class="menu__item">
+							<li class="menu__item" @click="toggleMainMenu">
 								<a href="#about" class="menu__link">
 									Despre noi
 								</a>
 							</li>
-							<li class="menu__item">
+							<li class="menu__item" @click="toggleMainMenu">
 								<a  href="#services" class="menu__link">
 									Servicii
 								</a>
 							</li>
-							<li  class="menu__item">
+							<li  class="menu__item" @click="toggleMainMenu">
 								<a href="#advantages" class="menu__link">
 									Avantaje
 								</a>
 							</li>
-							<li  class="menu__item">
+							<li  class="menu__item" @click="toggleMainMenu">
 								<a href="#service-prices" class="menu__link">
 									PRETURI
 								</a>
 							</li>
-							<li  class="menu__item">
+							<li  class="menu__item" @click="toggleMainMenu">
 								<a href="#gallery" class="menu__link">
 									Galerie
 								</a>
 							</li>
-							<li class="menu__item">
+							<li class="menu__item" @click="toggleMainMenu">
 								<a href="#contacts" class="menu__link">
 									Contact
 								</a>
