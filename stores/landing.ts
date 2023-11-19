@@ -72,10 +72,13 @@ export const useLandingStore = defineStore('landing', {
             try {
                 const q = query(collection(db, "services"))
                 const rezult = await getDocs(q)
+                let serviceItems:IServiceSectionItem[] = [] 
 
                 rezult.forEach((doc) => {
-                    this.services.push({id: doc.id, ...doc.data()} as IServiceSectionItem) 
+                    serviceItems.push({id: doc.id, ...doc.data()} as IServiceSectionItem) 
                 })
+
+                this.services = [...serviceItems].sort((a,b) => a.order! - b.order!)
                 
             } catch (error) {
                 console.log(error)
@@ -135,15 +138,37 @@ export const useLandingStore = defineStore('landing', {
             }
         },
 
+        async saveServicesSectionItemsOrder() {
+            let newOrder = 0
+            for await (const service of this.services) {
+                try {
+                    const docRef = doc(db, "services", service.id as string)
+    
+                    const data : Partial<IServiceSectionItem> = {
+                        order: newOrder
+                    }
+                   
+                   await updateDoc(docRef, data)
+
+                   newOrder++
+                } catch {
+
+                }
+            }
+        },
+
         //BENEFITS SECTION       
         async getBenefitsSectionItems() {
                 try {
                     const q = query(collection(db, "benefits"))
                     const rezult = await getDocs(q)
+                    let benefitsItems:IServiceSectionItem[] = []
     
                     rezult.forEach((doc) => {
-                        this.benefits.push({id: doc.id, ...doc.data()} as IServiceSectionItem) 
+                        benefitsItems.push({id: doc.id, ...doc.data()} as IServiceSectionItem) 
                     })
+
+                    this.benefits = [...benefitsItems].sort((a,b) => a.order! - b.order!)
                     
                 } catch (error) {
                     console.log(error)
@@ -203,14 +228,37 @@ export const useLandingStore = defineStore('landing', {
                 }
         },
 
+        async saveBenefitsSectionItemsOrder() {
+            let newOrder = 0
+            for await (const item of this.benefits) {
+                try {
+                    const docRef = doc(db, "benefits", item.id as string)
+    
+                    const data : Partial<IServiceSectionItem> = {
+                        order: newOrder
+                    }
+                    
+                   await updateDoc(docRef, data)
+
+                   newOrder++
+                } catch {
+
+                }
+            }
+        },
+
         //Questions SECTION
         async getQuestionSectionItems() {
             try {
                 const q = query(collection(db, "questions"))
                 const rezult = await getDocs(q)
+                let Items:IQuestion[] = []
+
                 rezult.forEach((doc) => {
-                    this.questions.push({id: doc.id, ...doc.data()} as IQuestion) 
+                    Items.push({id: doc.id, ...doc.data()} as IQuestion) 
                 })
+
+                this.questions = [...Items].sort((a,b) => a.order! - b.order!)
                 
             } catch (error) {
                 console.log(error)
@@ -261,15 +309,38 @@ export const useLandingStore = defineStore('landing', {
                 notify.SetNofication("Error", `Error update service item. error: ${error}`, "error")
             }
         },
+
+        async saveQuestionsSectionItemsOrder() {
+            let newOrder = 0
+            for await (const item of this.questions) {
+                try {
+                    const docRef = doc(db, "questions", item.id as string)
+    
+                    const data : Partial<IQuestion> = {
+                        order: newOrder
+                    }
+                    
+                   await updateDoc(docRef, data)
+
+                   newOrder++
+                } catch {
+
+                }
+            }
+        },
         
         //PRICES AND SERVICES SECTION
         async getPricesSectionItems() {
             try {
                 const q = query(collection(db, "prices"))
                 const rezult = await getDocs(q)
+                let Items:IServiceAndPrice[] = []
+
                 rezult.forEach((doc) => {
-                    this.pricesAndServices.push({id: doc.id, ...doc.data()} as IServiceAndPrice) 
+                    Items.push({id: doc.id, ...doc.data()} as IServiceAndPrice) 
                 })
+
+                this.pricesAndServices = [...Items].sort((a,b) => a.order! - b.order!)
                 
             } catch (error) {
                 console.log(error)
@@ -326,6 +397,25 @@ export const useLandingStore = defineStore('landing', {
             }
 
         }, 
+
+        async savePricesSectionItemsOrder() {
+            let newOrder = 0
+            for await (const item of this.pricesAndServices) {
+                try {
+                    const docRef = doc(db, "prices", item.id as string)
+    
+                    const data : Partial<IServiceAndPrice> = {
+                        order: newOrder
+                    }
+                    
+                   await updateDoc(docRef, data)
+
+                   newOrder++
+                } catch {
+
+                }
+            }
+        },
 
          //Gallery SECTION
         async getGallerySectionItems() {

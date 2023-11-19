@@ -9,6 +9,14 @@ const deleteDialogVisible = ref<boolean>(false)
 const updateDialogVisible = ref<boolean>(false)
 const selectedItem = ref<IQuestion>()
 
+const dragOtions = computed(() => {
+  return {
+    animation: 200,
+  }
+})
+
+const isLoading = ref<boolean>(false)
+
 const updateItemHandle = async (item : IQuestion) => {
     selectedItem.value = item
     updateDialogVisible.value = true
@@ -32,6 +40,12 @@ const updateServiceItem = async (item: IQuestion, id: string) => {
   item.id = id
   await landing.updateQuestionSectionItem(item)
   updateDialogVisible.value = false
+}
+
+const saveOrderItems = async() => {
+  isLoading.value = true
+   await landing.saveQuestionsSectionItemsOrder()
+   isLoading.value = false
 }
 </script>
 
@@ -77,19 +91,24 @@ const updateServiceItem = async (item: IQuestion, id: string) => {
         </div>
         <div v-else>
             <h3 class="header-service-item">List of qustions:</h3>
-            <TransitionGroup name="list" tag="ul">
-                <li
-                    v-for="question in questions"
-                    :key="question.id" 
-                    class="list-sevices"      
-                >   
-                  <AdminUIListServiceItem 
-                    :title="question.question"
-                    @update-item="updateItemHandle(question)"
-                    @delete-item="deleteItemHandle(question)"
-                  />
-                </li>
-            </TransitionGroup>
+            <draggable v-model="questions" v-bind="dragOtions">
+                <TransitionGroup name="list">
+                    <div
+                        v-for="question in questions"
+                        :key="question.id" 
+                        class="list-sevices"      
+                    >   
+                        <AdminUIListServiceItem 
+                            :title="question.question"
+                            @update-item="updateItemHandle(question)"
+                            @delete-item="deleteItemHandle(question)"
+                        />
+                    </div>
+                </TransitionGroup>
+            </draggable>
+            <div class="order-save-button">
+                <el-button type="success" plain @click="saveOrderItems" :loading="isLoading">Save Items Order</el-button>
+            </div>   
         </div>
         <div style="margin-top: 40px;">
             <h3 class="header-service-item">Add new question:</h3>
@@ -108,6 +127,12 @@ const updateServiceItem = async (item: IQuestion, id: string) => {
     padding: 40px 5px;
     font-style: italic;
     text-align: center;
+}
+
+.order-save-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .header-service-item {

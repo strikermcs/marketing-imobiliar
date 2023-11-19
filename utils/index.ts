@@ -69,7 +69,7 @@ export const initSliders = ()  => {
 				);
 		  
 				// Add the observer to you swiper
-				observer.observe(document.querySelector(".services__slider"));
+				observer.observe(document.querySelector(".services__slider")!);
 			  } else {
 				// You can use the polyfill or just start the autoplay
 			  }
