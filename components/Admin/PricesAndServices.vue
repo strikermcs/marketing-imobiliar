@@ -9,7 +9,13 @@ const updateDialogVisible = ref<boolean>(false)
 
 const selectedItem = ref<IServiceAndPrice>()
 
+const dragOtions = computed(() => {
+  return {
+    animation: 200,
+  }
+})
 
+const isLoading = ref<boolean>(false)
 
 const updateItemHandle = (item: IServiceAndPrice) => {
     selectedItem.value = item
@@ -33,6 +39,12 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
     item.id = id
     await landing.updatePricesSectionItem(item)
     updateDialogVisible.value = false
+}
+
+const saveOrderItems = async() => {
+  isLoading.value = true
+   await landing.savePricesSectionItemsOrder()
+   isLoading.value = false
 }
 
 </script>
@@ -77,19 +89,24 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
         </div>
         <div v-else style="margin-bottom: 50px;">
             <h3 class="header-service-item">List of Praces for Services:</h3>
-            <TransitionGroup name="list" tag="ul">
-                <li
-                    v-for="prices in pricesAndServices"
-                    :key="prices.id" 
-                    class="list-sevices"      
-                >   
-                  <AdminUIListServiceItem 
-                    :title="prices.title"
-                    @update-item="updateItemHandle(prices)"
-                    @delete-item="deleteItemHandle(prices)"
-                  />
-                </li>
-            </TransitionGroup>
+            <draggable v-model="pricesAndServices" v-bind="dragOtions">
+                <TransitionGroup name="list">
+                    <div
+                        v-for="prices in pricesAndServices"
+                        :key="prices.id" 
+                        class="list-sevices"      
+                    >   
+                        <AdminUIListServiceItem 
+                            :title="prices.title"
+                            @update-item="updateItemHandle(prices)"
+                            @delete-item="deleteItemHandle(prices)"
+                        />
+                    </div>
+                </TransitionGroup>
+            </draggable>
+            <div class="order-save-button">
+                <el-button type="success" plain @click="saveOrderItems" :loading="isLoading">Save Items Order</el-button>
+            </div>   
         </div>
         <div>
             <h3 class="header-service-item">Add new services and Prices:</h3>
@@ -120,6 +137,11 @@ const updatePricesAndService = async (item: IServiceAndPrice, id: string) => {
     text-align: center;
 }
 
+.order-save-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
 
 .list-sevices {
     padding: 0px 10px;

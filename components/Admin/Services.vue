@@ -5,9 +5,19 @@ import type { IServiceSectionItem } from '~/types';
 const landing = useLandingStore()
 const { services } = storeToRefs(landing)
 
+const isLoading = ref<boolean>(false)
+
 const selectedItem = ref<IServiceSectionItem>()
 const deleteDialogVisible = ref<boolean>(false)
 const updateDialogVisible = ref<boolean>(false)
+
+
+const dragOtions = computed(() => {
+  return {
+    animation: 200,
+  }
+})
+
 
 const deleteItemHandle = (item: IServiceSectionItem) => {
     selectedItem.value = item
@@ -32,6 +42,12 @@ const updateServiceItem = async (item: IServiceSectionItem, id: string) => {
   item.id = id
   await landing.updateServiceSectionItem(item)
   updateDialogVisible.value = false
+}
+
+const saveOrderItems = async() => {
+  isLoading.value = true
+   await landing.saveServicesSectionItemsOrder()
+   isLoading.value = false
 }
 
 </script>
@@ -79,20 +95,25 @@ const updateServiceItem = async (item: IServiceSectionItem, id: string) => {
         </div>
         <div v-else>
             <h3 class="header-service-item">List of services:</h3>
-            <TransitionGroup name="list" tag="ul">
-                <li
-                    v-for="service in services"
-                    :key="service.id" 
-                    class="list-sevices"      
-                >   
-                  <AdminUIListServiceItem 
-                    :title="service.title"
-                    :image="service.image"
-                    @update-item="updateItemHandle(service)"
-                    @delete-item="deleteItemHandle(service)"
-                  />
-                </li>
-            </TransitionGroup>
+            <draggable v-model="services" v-bind="dragOtions">
+              <TransitionGroup name="list">
+                  <div
+                      v-for="service in services"
+                      :key="service.id" 
+                      class="list-sevices"      
+                  >   
+                    <AdminUIListServiceItem 
+                      :title="service.title"
+                      :image="service.image"
+                      @update-item="updateItemHandle(service)"
+                      @delete-item="deleteItemHandle(service)"
+                    />
+                  </div>
+              </TransitionGroup>
+            </draggable>
+            <div class="order-save-button">
+              <el-button type="success" plain @click="saveOrderItems" :loading="isLoading">Save Items Order</el-button>
+            </div>        
         </div>
         <div style="margin-top: 40px;">
             <h3 class="header-service-item">Add new service:</h3>
@@ -113,6 +134,12 @@ const updateServiceItem = async (item: IServiceSectionItem, id: string) => {
     padding-bottom: 20px;
     color: #707070;
     text-align: center;
+}
+
+.order-save-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .no-items {

@@ -27,12 +27,14 @@ export interface IServiceSectionItem {
     title: string
     description: string
     image: string
+    order?: number
 }
 
 export interface IQuestion {
     id?: string
     question: string
     answer: string
+    order?: number
 }
 
 export interface IPricesAndServicesContent {
@@ -53,6 +55,7 @@ export interface IServiceAndPrice {
     services: Array<IServicePrice>
     exampleUrl?: string
     comment?: string
+    order?: number
 } 
 
 export interface IGalleryImage {
