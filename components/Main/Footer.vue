@@ -9,9 +9,9 @@ const { socials, additionalInfo } = storeToRefs(contacts)
 	<footer class="footer">
 		<div class="footer__container">
 			<div class="footer__body">
-				<a href="#" class="footer__logo">
+				<NuxtLink to="/" class="footer__logo">
 					<img src="~/assets/img/logo.svg" alt="logo">
-				</a>
+				</NuxtLink>
 				<div class="footer__columns">
 					<div class="footer__col">
 						<h4 class="footer__col-title">
@@ -19,9 +19,9 @@ const { socials, additionalInfo } = storeToRefs(contacts)
 						</h4>
 						<ul class="footer__col-list">
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link dekor-line">
+								<NuxtLink to="/cookies_policy" class="footer__col-link dekor-line">
 									Politica de Cookies
-								</a>
+								</NuxtLink>
 							</li>
 							<li class="footer__col-item">
 								<a href="#" class="footer__col-link dekor-line">
@@ -89,6 +89,12 @@ const { socials, additionalInfo } = storeToRefs(contacts)
 						<ul class="footer__col-list">
 							<li class="footer__col-item">
 								S.C. MARKETING IMOBILIAR SRL
+							</li>
+							<li class="footer__col-item">
+								CUI: 49232186
+							</li>
+							<li class="footer__col-item">
+								NRC: J13/4028/2023
 							</li>
 							<li class="footer__col-item">
 								<a :href="`tel:${additionalInfo?.tel}`" class="footer__col-link">
