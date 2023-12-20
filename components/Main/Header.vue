@@ -8,9 +8,9 @@ const {width} = useWindowSize()
 	<header class="header" id="header">
 		<div class="header__container">
 			<div class="header__body">
-				<a href="#" class="header__logo">
+				<NuxtLink to="/" class="header__logo">
 					<img src="~/assets/img/logo.svg" alt="logo">
-				</a>
+				</NuxtLink>
 				<div 
 					class="header__menu menu"		
 				>
