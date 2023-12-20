@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { IServicePrice, TServicePrice } from '~/types';
 import AOS from 'aos'
+import { isWebp, initSliders, spollers } from '~/utils'
 import 'aos/dist/aos.css'
 
 const landing = useLandingStore() 
@@ -74,8 +75,10 @@ const submitedOrderHandler = () => {
 onMounted(() => {
   AOS.init({ 
 	offset: 200
-}) 
-
+})
+  isWebp()
+  initSliders()
+  spollers() 
 })
 </script>
 

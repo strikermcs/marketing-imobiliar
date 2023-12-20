@@ -3,6 +3,14 @@ const contacts = useContactsStore()
 
 const { socials, additionalInfo } = storeToRefs(contacts)
 
+const route = useRoute()
+
+const menuClick = () => {
+	if(route.path != '/') {
+		navigateTo('/')
+	}
+}
+
 </script>
 
 <template>
@@ -24,29 +32,29 @@ const { socials, additionalInfo } = storeToRefs(contacts)
 								</NuxtLink>
 							</li>
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link dekor-line">
+								<a href="https://anpc.ro/" class="footer__col-link dekor-line">
 									ANPC
 								</a>
 							</li>
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link dekor-line">
+								<NuxtLink to="/solution" class="footer__col-link dekor-line">
 									Solutionarea litigiilor
-								</a>
+								</NuxtLink>
 							</li>
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link dekor-line">
+								<NuxtLink to="/gdpr" class="footer__col-link dekor-line">
 									Politica GDPR
-								</a>
+								</NuxtLink>
 							</li>
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link dekor-line">
+								<NuxtLink to="/terms" class="footer__col-link dekor-line">
 									Termeni si conditii
-								</a>
+								</NuxtLink>
 							</li>
 							<li class="footer__col-item">
-								<a href="#" class="footer__col-link dekor-line">
+								<NuxtLink to="/privacy" class="footer__col-link dekor-line">
 									Confidentialitate
-								</a>
+								</NuxtLink>
 							</li>
 						</ul>
 					</div>
@@ -55,27 +63,27 @@ const { socials, additionalInfo } = storeToRefs(contacts)
 							MENIUL
 						</h4>
 						<ul class="footer__col-list">
-							<li class="footer__col-item">
+							<li class="footer__col-item" @click="menuClick">
 								<a  href="#about" class="footer__col-link">
 									Despre noi
 								</a>
 							</li>
-							<li class="footer__col-item">
+							<li class="footer__col-item" @click="menuClick">
 								<a  href="#services" class="footer__col-link">
 									Servicii
 								</a>
 							</li>
-							<li class="footer__col-item">
+							<li class="footer__col-item" @click="menuClick">
 								<a href="#advantages" class="footer__col-link">
 									Avantaje
 								</a>
 							</li>
-							<li class="footer__col-item">
+							<li class="footer__col-item" @click="menuClick">
 								<a  href="#service-prices" class="footer__col-link">
 									Preturi
 								</a>
 							</li>
-							<li class="footer__col-item">
+							<li class="footer__col-item" @click="menuClick">
 								<a  href="#gallery" class="footer__col-link">
 									Galerie
 								</a>

@@ -98,7 +98,8 @@ const { additionalInfo } = storeToRefs(contacts)
 
 <style scoped>
 .content {
-    margin-top: 70px;
+    margin: 100px 0;
+    padding: 0 10px;
 }
 
 .cookiepolicy-item {
@@ -113,9 +114,9 @@ const { additionalInfo } = storeToRefs(contacts)
     padding-top: 10px;
 }
 
-/* .cookiepolicy-item ol {
-    font-size: 16px;
-    font-weight: normal;
-    padding-top: 10px;
-} */
+a {
+    color: blue;
+    text-decoration: underline;
+}
+
 </style>

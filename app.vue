@@ -35,9 +35,9 @@ onBeforeMount(async() => {
 })
 </script>
 
-<template>
-  <UILoader v-if="loading"/>
-  <NuxtLayout v-else>
-    <NuxtPage />
-  </NuxtLayout>
+<template> 
+    <UILoader v-if="loading"/>
+    <NuxtLayout v-else>
+      <NuxtPage />
+    </NuxtLayout>
 </template>

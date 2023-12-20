@@ -4,6 +4,9 @@ import { Navigation, Scrollbar, Autoplay } from 'swiper/modules';
 const { width } = useWindowSize()
 
 export const toggleMainMenu = () => {
+	// if(route.path != '/') {
+	// 	navigateTo('/')
+	// }
 	if(width.value < 992) {
 		document.documentElement.classList.toggle("lock") 
     	document.documentElement.classList.toggle("menu-open");
