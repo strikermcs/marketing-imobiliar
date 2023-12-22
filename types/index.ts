@@ -97,7 +97,8 @@ export interface IOrderMail {
     services: IServicePrice[]
     price: number
     text?: string
-
+    invoiceId?: string
+    isPay?: boolean 
 }
 
 export interface IMail<T> {

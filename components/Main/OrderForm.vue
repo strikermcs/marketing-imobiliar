@@ -2,6 +2,7 @@
 import type { IMail, IOrderMail, IServicePrice, TServicePrice } from '~/types';
 import type { FormInstance, FormRules } from 'element-plus';
 import { ShoppingBag } from '@element-plus/icons-vue'
+import {v4 as uuid } from 'uuid'
 
 interface Props {
     services: IServicePrice[]
@@ -71,8 +72,22 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             phone: ruleForm.phone as string,
             text: ruleForm.text as string,
             services: props.services,
-            price: props.totalPrice
+            price: props.totalPrice,
+            invoiceId: uuid(),
+            isPay: false
         }
+
+      const link = $fetch('/api/payment', {
+          method: 'POST',
+          body: {
+            amount: item.price,
+            invoiceId: item.invoiceId,
+            firstName: item.username,
+            email: item.email,
+            phone: item.phone,
+            text: item.text
+          }
+        })
 
         const mail: IMail<IOrderMail> = {
             type: 'order',
@@ -80,8 +95,12 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             isRead: false
         }
       
-        mailStore.AddMailItem(mail)
-        emits('submited')
+        mailStore.AddMailItem
+      
+        link.then((data) => {
+          document.location.href = data
+        })
+       
     } else {
       console.log('error submit!', fields)
     }
