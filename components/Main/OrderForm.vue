@@ -95,7 +95,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
             isRead: false
         }
       
-        mailStore.AddMailItem
+        mailStore.AddMailItem(mail)
       
         link.then((data) => {
           document.location.href = data

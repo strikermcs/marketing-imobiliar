@@ -36,7 +36,9 @@ export const useMailStore = defineStore('mail', {
                 const docRef = await addDoc(collection(db, "mails"), item)
                 item.id = docRef.id
                 this.mails.push(item)
-                notify.SetNofication("Success", "Message send", "success")
+                if(item.type != 'order') {
+                    notify.SetNofication("Success", "Message send", "success")
+                }          
             } catch (error) {
                 notify.SetNofication("Error", `Error add service item. error: ${error}`, "error")
             }
@@ -70,6 +72,10 @@ export const useMailStore = defineStore('mail', {
                 })
             })
                 
+        },
+
+        async setMailOrderIsPayed() {
+
         }
     }
 })

@@ -19,7 +19,7 @@ const priceServiceToDisplay = computed(() => {
 
 <template>
     <div>
-        <h2 class="order-mail-header">Order</h2>
+        <h2 class="order-mail-header">Order #{{mail.mail.invoiceId}}</h2>
         <div class="order-info">
             <ul>
                 <li
@@ -36,13 +36,19 @@ const priceServiceToDisplay = computed(() => {
                 Valoare totală: {{mail.mail.price}} lei
             </div>
        </div>
-       <div class="user-info">
-            <h2 class="user-info-order">Customer info:</h2>
-            <div class="info-order-content">
-                <div class="info-item">Username: <span>{{mail.mail.username}}</span></div>
-                <div class="info-item">Email: <span>{{mail.mail.email}}</span></div>
-                <div class="info-item">Phone: <span>{{mail.mail.phone}}</span></div>
-                <div class="info-item">Additinal Info: <span>{{mail.mail.text}}</span></div>
+       <div class="info">
+            <div class="user-info">
+                <h2 class="user-info-order">Customer info:</h2>
+                <div class="info-order-content">
+                    <div class="info-item">Username: <span>{{mail.mail.username}}</span></div>
+                    <div class="info-item">Email: <span>{{mail.mail.email}}</span></div>
+                    <div class="info-item">Phone: <span>{{mail.mail.phone}}</span></div>
+                    <div class="info-item">Additinal Info: <span>{{mail.mail.text}}</span></div>
+                </div>
+            </div>
+            <div>
+                <div v-if="mail.mail.isPay" class="payed">Paid</div>
+                <div v-else class="nopay">Unpaid</div>
             </div>
        </div>
     </div>
@@ -59,6 +65,24 @@ const priceServiceToDisplay = computed(() => {
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 20px;
+}
+
+.payed {
+    font-size: 20px;
+    color: green;
+    font-weight: 900;
+}
+
+.nopay {
+    font-size: 20px;
+    color: red;
+    font-weight: 900; 
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .order-item {
