@@ -20,6 +20,13 @@ export const setMailOrderIsPayed = async (invoiceId: string ) => {
 
             const data: Partial<IMail<Partial<IOrderMail>>> = {
                 mail: {
+                    username: mail.mail.username,
+                    email: mail.mail.email,
+                    phone: mail.mail.phone,
+                    services: mail.mail.services,
+                    price: mail.mail.price,
+                    text: mail.mail.text,
+                    invoiceId: mail.mail.invoiceId,
                     isPay: true
                 }
             }
