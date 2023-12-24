@@ -21,9 +21,9 @@ export default defineEventHandler(async (event) => {
     const result = epClient.checkResponse(params)
 
     if(result.success) {
+        await setMailOrderIsPayed(params.invoiceId)
         await sendRedirect(event, '/payment_success')
     } else {
         await sendRedirect(event, '/payment_error')
-        await setMailOrderIsPayed(params.invoiceId)
     }  
 })

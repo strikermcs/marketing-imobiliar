@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
 
     const price: number = parseInt(body.amount.toFixed(2))
     const data = {
-        amount: 1.00,
+        amount: price,
         currency: 'RON',
         invoiceId: body.invoiceId,
         orderDescription: body.text || "Payment description",
