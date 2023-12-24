@@ -1,8 +1,9 @@
 import epClient from '../../libs/epClient'
+import { setMailOrderIsPayed } from '../../services/setPayed'
 
 export default defineEventHandler(async (event) => {
     const body = await readBody(event)
-    
+   
     const params = {
         amount: body.amount,
         currency: body.curr,
@@ -23,5 +24,6 @@ export default defineEventHandler(async (event) => {
         await sendRedirect(event, '/payment_success')
     } else {
         await sendRedirect(event, '/payment_error')
+        await setMailOrderIsPayed(params.invoiceId)
     }  
 })
