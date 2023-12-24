@@ -7,7 +7,7 @@ import { CircleClose } from '@element-plus/icons-vue'
     <main>
         <div class="success">
             <el-icon size="100" color="red"><CircleClose /></el-icon>
-            <div class="text">Eroare tranzacție</div>
+            <div class="text">Tranzactie respinsa</div>
         </div>
     </main>
 </template>
