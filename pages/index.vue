@@ -434,7 +434,7 @@ onMounted(() => {
 				</a>
 			</div>
 		</section>
-		<section class="reviews">
+		<section class="reviews" v-if="testimonials.length > 0">
 			<div class="reviews__container">
 				<h2 class="reviews__title title">
 					<span>RECENZII</span>
