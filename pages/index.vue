@@ -74,7 +74,7 @@ const submitedOrderHandler = () => {
 
 onMounted(() => {
   AOS.init({ 
-	offset: 200
+	offset: 120
 })
   isWebp()
   initSliders()
@@ -349,7 +349,7 @@ onMounted(() => {
 								</div>
 							</div>
 							<div class="item-prices__bottom">
-								<a :href="prices.exampleUrl" v-if="prices.exampleUrl" class="item-prices__btn btn">
+								<a :href="prices.exampleUrl" target="_blank" v-if="prices.exampleUrl" class="item-prices__btn btn">
 									Exemple
 								</a>
 								<div class="item-prices__info" v-if="prices.comment">
