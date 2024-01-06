@@ -14,8 +14,8 @@ const { width } = useWindowSize()
 </script>
 
 <template>
-    <el-dialog v-model="isOpen" title="Vezi fotografii" :width="width < 1200 && '95vw' as any">
-        <el-carousel height="50vh">
+    <el-dialog v-model="isOpen"  title="Vezi fotografii" :width="width < 1200 && '95vw' as any" >
+        <el-carousel :height="width < 600 && '250px' as any">
             <el-carousel-item v-for="img in images" :key="img.id">
                 <div class="preview">
                     <img :src="img.image" alt="image" class="image-pr">
@@ -36,6 +36,10 @@ const { width } = useWindowSize()
 .image-pr {
     width: 100%;
     object-fit: contain;
+}
+
+.el-dialog__body {
+    height: 100px;
 }
 
 </style>
