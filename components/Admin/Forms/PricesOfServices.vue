@@ -11,13 +11,16 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const addImagesToServiceModalActive = ref<boolean>(false)
+
 const formRef = ref<FormInstance>()
 const dynamicValidateForm = reactive<IServiceAndPrice>({
     title: props.defaultItem?.title as string || '',
     contentList: props.defaultItem?.contentList || [],
     services: props.defaultItem?.services as IServicePrice[] || [],
     exampleUrl: props.defaultItem?.exampleUrl || '',
-    comment: props.defaultItem?.comment || ''
+    comment: props.defaultItem?.comment || '',
+    exampleImages: props.defaultItem?.exampleImages || []
 })
 
 
@@ -64,7 +67,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
             exampleUrl: dynamicValidateForm.exampleUrl,
             contentList: dynamicValidateForm.contentList,
             services: dynamicValidateForm.services,
-            comment: dynamicValidateForm.comment
+            comment: dynamicValidateForm.comment,
+            exampleImages: []
         }
       props.submitFunc(item, props.defaultItem?.id)
       resetForm(formRef.value)
@@ -76,9 +80,18 @@ const submitForm = (formEl: FormInstance | undefined) => {
     }
   })
 }
+
+const addImagesToServise = () => {
+    addImagesToServiceModalActive.value = true
+}
 </script>
 
 <template>
+    <AdminImagesUploadModal 
+        v-model="addImagesToServiceModalActive" 
+        :images="defaultItem?.exampleImages!" 
+        :serviceId="defaultItem?.id!"
+    />
     <el-form
         ref="formRef"
         :model="dynamicValidateForm"
@@ -173,11 +186,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 <el-button style="margin-bottom: 10px;" @click.prevent="removeServicePrice(priceService)">Delete</el-button>
             </div>
         </div>
-        <el-form-item>
-            <el-button type="primary" @click="submitForm(formRef)">{{funcButtonLabel}}</el-button>
-            <el-button @click="addContent">New Content</el-button>
-            <el-button @click="addServicePrice">New Price for Service</el-button>
-            <el-button @click="resetForm(formRef)">Reset</el-button>
+        <el-form-item >
+            <div class="actions">
+                <el-button type="primary" @click="submitForm(formRef)">{{funcButtonLabel}}</el-button>
+                <el-button @click="addContent">New Content</el-button>
+                <el-button @click="addServicePrice">New Price for Service</el-button>
+                <el-button @click="addImagesToServise" v-if="defaultItem">Add/Edit Images</el-button>
+                <el-button @click="resetForm(formRef)">Reset</el-button>
+            </div>
         </el-form-item>
     </el-form>
 </template>
@@ -195,5 +211,17 @@ const submitForm = (formEl: FormInstance | undefined) => {
     background: rgb(191, 191, 191);
     border-radius: 5px;
     margin-top: 5px;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+@media screen and (max-width: 900px) {
+    .actions {
+        justify-content: center;
+    }
 }
 </style>

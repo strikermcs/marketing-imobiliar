@@ -31,6 +31,7 @@ onBeforeMount(async() => {
     await contacts.getAdditionalInfo()
     await contacts.getSocialsItems()
     await mails.getMailsItems()
+    await landing.getImagesServiceExampleItems()
     loading.value = false 
 })
 </script>

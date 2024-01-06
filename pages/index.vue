@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IServicePrice, TServicePrice } from '~/types';
+import type { IServiceExampleImage, IServicePrice, TServicePrice } from '~/types';
 import AOS from 'aos'
 import { isWebp, initSliders, spollers } from '~/utils'
 import 'aos/dist/aos.css'
@@ -24,6 +24,8 @@ const totalServicesPrice = ref<number>(0)
 const servicePricesArray = ref<IServicePrice[]>([])
 
 const showOrderDialogVisible = ref<boolean>(false)
+const showServiceImagePreview = ref<boolean>(false)
+const serviceImages = ref<IServiceExampleImage[]>([])
 
 const priceServiceToDisplay = computed(() => {
 	return (value: TServicePrice) => {
@@ -72,6 +74,11 @@ const submitedOrderHandler = () => {
 	
 }
 
+const showServiceImagePreviewHandler = (images: IServiceExampleImage[]) => {
+	serviceImages.value = images
+	showServiceImagePreview.value = true
+} 
+
 onMounted(() => {
   AOS.init({ 
 	offset: 120
@@ -103,6 +110,8 @@ onMounted(() => {
             </span>
             </template>
         </el-dialog>
+
+		<MainImagesPreview v-model="showServiceImagePreview" :images="serviceImages" />
 
 		<section class="promo" id="promo">	
 			<ClientOnly>
@@ -349,9 +358,33 @@ onMounted(() => {
 								</div>
 							</div>
 							<div class="item-prices__bottom">
-								<a :href="prices.exampleUrl" target="_blank" v-if="prices.exampleUrl" class="item-prices__btn btn">
-									Exemple
-								</a>
+								<div v-if="prices.exampleUrl || prices.exampleImages.length > 0">
+									<div v-if="prices.exampleUrl && prices.exampleImages.length > 0">
+										<el-dropdown>
+											<div class="item-prices__btn btn" style="cursor: pointer;">
+												Exemple
+											</div>
+											<template #dropdown>
+												<el-dropdown-menu>
+													<el-dropdown-item>
+														<a :href="prices.exampleUrl" target="_blank">
+															Vezi video
+														</a>
+													</el-dropdown-item>
+													<el-dropdown-item>
+														<span @click="showServiceImagePreviewHandler(prices.exampleImages)">Vezi fotografii</span>
+													</el-dropdown-item>
+												</el-dropdown-menu>
+											</template> 
+										</el-dropdown>
+									</div>
+									<a :href="prices.exampleUrl" target="_blank" v-else-if="prices.exampleUrl" class="item-prices__btn btn">
+										Exemple
+									</a>
+									<div class="item-prices__btn btn" style="cursor: pointer;" v-else @click="showServiceImagePreviewHandler(prices.exampleImages)">
+										Exemple
+									</div>
+								</div>
 								<div class="item-prices__info" v-if="prices.comment">
 									{{prices.comment}}
 								</div>

@@ -19,7 +19,8 @@ const ruleForm = reactive<Partial<IOrderMail>>({
   username: '',
   email: '',
   phone: '',
-  text: ''
+  text: '',
+  confirmation: []
 })
 
 
@@ -49,6 +50,15 @@ const rules = reactive<FormRules<Partial<IOrderMail>>>({
             trigger: 'blur',
         }
     ],
+
+    confirmation: [
+      {
+        type: 'array',
+        required: true,
+        message: 'Please accept the agreement',
+        trigger: 'change',
+      }
+    ]
 
 })
 
@@ -149,6 +159,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
              <el-form-item label="Additional information:" prop="text">
                <el-input v-model="ruleForm.text" type="textarea" />
              </el-form-item>
+             <el-form-item prop="confirmation">
+              <el-checkbox-group v-model="ruleForm.confirmation">
+                <el-checkbox name="confirmation" label="///">
+                  Sunt de acord cu <NuxtLink to="/terms" class="link">Termenii si Conditiile</NuxtLink> si cu <NuxtLink to="/privacy" class="link">Politica de Confidentialitate</NuxtLink>
+                </el-checkbox>
+              </el-checkbox-group>
+             </el-form-item>
              <el-form-item>
                <el-button type="primary" :icon="ShoppingBag" @click="submitForm(ruleFormRef)">
                  Cumpara
@@ -177,6 +194,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     gap: 20px;
     font-size: 18px;
     padding-bottom: 10px;
+}
+
+.link {
+  color: blue;
+  text-decoration: underline;
 }
 
 .order-total {

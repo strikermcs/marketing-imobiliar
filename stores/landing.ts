@@ -1,6 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, query, updateDoc } from "firebase/firestore"
 import { db } from "~/libs/firebase"
-import type { IGalleryImage, IPromoSection, IQuestion, IServiceAndPrice, IServiceSectionItem, ITestimonial } from "~/types"
+import type { IGalleryImage, IPromoSection, IQuestion, IServiceAndPrice, IServiceExampleImage, IServiceSectionItem, ITestimonial } from "~/types"
 import { useNotificationStore } from "./notification"
 import { deleteFile } from "~/services/uploadFile"
 
@@ -337,7 +337,8 @@ export const useLandingStore = defineStore('landing', {
                 let Items:IServiceAndPrice[] = []
 
                 rezult.forEach((doc) => {
-                    Items.push({id: doc.id, ...doc.data()} as IServiceAndPrice) 
+                    //@ts-ignore
+                    Items.push({id: doc.id, exampleImages: [], ...doc.data()} as IServiceAndPrice) 
                 })
 
                 this.pricesAndServices = [...Items].sort((a,b) => a.order! - b.order!)
@@ -448,6 +449,61 @@ export const useLandingStore = defineStore('landing', {
                 deleteDoc(docRef).then(() => {
                     this.gallery = this.gallery.filter(s => s.id != item.id)
                     deleteFile(`images/gallery/${item.image.match('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')?.[0]}`)
+                    notify.SetNofication("Success", "Image item is successfully deleted", "success")
+                })
+            } catch (error) {
+                notify.SetNofication("Error", `Error delete service item. error: ${error}`, "error")
+            }
+        },
+
+        //Service Images Examples
+        async getImagesServiceExampleItems() {
+            try {
+                const images: IServiceExampleImage[] = []
+                const q = query(collection(db, "serviceImagesExample"))
+                const rezult = await getDocs(q)
+                rezult.forEach((doc) => {
+                    images.push({id: doc.id, ...doc.data()} as IServiceExampleImage) 
+                })
+
+                images.forEach(i => {
+                    this.pricesAndServices.forEach(p => {
+                        if(p.id === i.serviceId) {
+                            p.exampleImages?.push(i)
+                        }
+                    })
+                })
+                
+            } catch (error) {
+                console.log(error)
+            }
+        },
+        async AddServiceImageExampleItem(item: IServiceExampleImage) {
+            const notify = useNotificationStore()
+            try {
+                const docRef = await addDoc(collection(db, "serviceImagesExample"), item)
+                item.id = docRef.id
+                this.pricesAndServices.forEach(p => {
+                    if(p.id === item.serviceId) {
+                        p.exampleImages?.push(item)
+                    }
+                })
+                notify.SetNofication("Success", "Image is successfully added", "success")
+            } catch (error) {
+                notify.SetNofication("Error", `Error add service item. error: ${error}`, "error")
+            }
+        },
+        async deleteServiceImageExampleItem(item: IServiceExampleImage) {
+            const notify = useNotificationStore()
+            try {
+                const docRef = doc(db, "serviceImagesExample", item.id as string)
+                deleteDoc(docRef).then(() => {
+                    this.pricesAndServices.forEach(p => {
+                        if(p.id === item.serviceId) {
+                            p.exampleImages?.filter(i => i.id != item.id)
+                        }
+                    })
+                    deleteFile(`images/service_example/${item.image.match('[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')?.[0]}`)
                     notify.SetNofication("Success", "Image item is successfully deleted", "success")
                 })
             } catch (error) {

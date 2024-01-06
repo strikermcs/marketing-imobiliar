@@ -48,12 +48,19 @@ export interface IServicePrice {
     price: TServicePrice
 }
 
+export interface IServiceExampleImage {
+    id?: string
+    image: string
+    serviceId: string
+}
+
 export interface IServiceAndPrice {
     id?: string
     title: string
     contentList?: Array<IPricesAndServicesContent>
     services: Array<IServicePrice>
     exampleUrl?: string
+    exampleImages: Array<IServiceExampleImage>
     comment?: string
     order?: number
 } 
@@ -99,6 +106,7 @@ export interface IOrderMail {
     text?: string
     invoiceId?: string
     isPay?: boolean 
+    confirmation?: []
 }
 
 export interface IMail<T> {
