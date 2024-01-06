@@ -10,10 +10,18 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       title: 'IMOBILIAR',
       htmlAttrs: {
-        lang: 'en',
+        lang: 'ro',
       },
       link: [
         {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
+      ],
+      meta: [
+        { property: 'og:title', content: 'MARKETING IMOBILIAR' },
+        { property: 'og:description', content: 'Diferențierea proprietății intr-o piață imobiliara competitivă' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: 'https://www.marketing-imobiliar.ro/' },
+        { property: 'og:locale', content: 'ro' },
+        { property: 'og:image', content: '/assets/img/promo-bg.jpg' },
       ]
     }
   },
