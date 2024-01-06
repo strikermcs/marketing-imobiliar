@@ -22,11 +22,12 @@ export default defineNuxtConfig({
         { property: 'og:url', content: 'https://www.marketing-imobiliar.ro/' },
         { property: 'og:locale', content: 'ro' },
         { property: 'og:image', content: '/assets/img/promo-bg.jpg' },
+        { name: "google-site-verification", content: 'cBMMPJN5YQ_uZQtc93P9J0K_3w_CmhMfRIRaU0SFQWU'}
       ]
     }
   },
   modules: [
-    '@vueuse/nuxt',
+    '@vueuse/nuxt', 
     '@pinia/nuxt',
     '@element-plus/nuxt'
   ],
