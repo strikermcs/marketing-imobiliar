@@ -21,7 +21,7 @@ export default defineNuxtConfig({
         { property: 'og:type', content: 'website' },
         { property: 'og:url', content: 'https://www.marketing-imobiliar.ro/' },
         { property: 'og:locale', content: 'ro' },
-        { property: 'og:image', content: 'public/promo-bg.jpg' },
+        { property: 'og:image', content: 'https://www.marketing-imobiliar.ro/promo-bg.jpg' },
         { name: "google-site-verification", content: 'cBMMPJN5YQ_uZQtc93P9J0K_3w_CmhMfRIRaU0SFQWU'}
       ]
     }
