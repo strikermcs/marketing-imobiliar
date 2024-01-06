@@ -15,7 +15,7 @@ const { width } = useWindowSize()
 
 <template>
     <el-dialog v-model="isOpen"  title="Vezi fotografii" :width="width < 1200 && '95vw' as any" >
-        <el-carousel :height="width < 600 && '250px' as any">
+        <el-carousel :height="width < 600 && '200px' as any">
             <el-carousel-item v-for="img in images" :key="img.id">
                 <div class="preview">
                     <img :src="img.image" alt="image" class="image-pr">
